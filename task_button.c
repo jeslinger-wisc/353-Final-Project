@@ -49,7 +49,7 @@ void task_button(void *pvParameters) {
         IS_PRESSED = (pressedInRow >= BUTTON_DEBOUNCE_VALUE);
 
         // Wait for next sampling.
-        vTaskDelay(pdMS_TO_TICKS(CHECK));
+        vTaskDelay(pdMS_TO_TICKS(BUTTON_PERIOD_DELAY));
     }
 }
 

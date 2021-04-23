@@ -21,8 +21,6 @@
 // Application header files
 #include "config.h"
 
-#include "task_menu.h"
-
 /*
  * Initialization function used to initialize hardware resources to use the S2
  * button on the MKII booster pack.

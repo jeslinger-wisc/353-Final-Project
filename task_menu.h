@@ -26,6 +26,4 @@
 extern TaskHandle_t Task_Menu_Handle;
 void task_menu(void *pvParameters);
 
-extern int CHECK;
-
 #endif /* TASK_MENU_H_ */
