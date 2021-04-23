@@ -22,6 +22,7 @@
 #include "config.h"
 #include "task_button.h"
 #include "task_buzzer.h"
+#include "task_accel.h"
 
 // Function handle and declaration for Menu Task.
 extern TaskHandle_t Task_Menu_Handle;

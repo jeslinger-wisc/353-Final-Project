@@ -13,6 +13,9 @@ TaskHandle_t Task_Buzzer_Handle;
 // Queue of melodies to play on buzzer.
 QueueHandle_t Queue_Buzzer;
 
+// Flag to know when to flush queue/stop playing current melody.
+static volatile bool FLUSH_BUZZER = false;
+
 /*
  * Initialization function used to initialize hardware resources to use the
  * buzzer on the MKII booster pack.

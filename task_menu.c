@@ -21,7 +21,7 @@ void task_menu(void *pvParameters) {
         "Task Button",
         configMINIMAL_STACK_SIZE,
         NULL,
-        3,
+        BUTTON_TASK_PRIORITY,
         &Task_Button_Handle
     );
 
@@ -31,16 +31,33 @@ void task_menu(void *pvParameters) {
         "Task Buzzer",
         configMINIMAL_STACK_SIZE,
         NULL,
-        3,
+        BUZZER_TASK_PRIORITY,
         &Task_Buzzer_Handle
+    );
+
+    // Create Accel Task (temporarily with same priority).
+    xTaskCreate
+    (   task_accel,
+        "Task Accel",
+        configMINIMAL_STACK_SIZE,
+        NULL,
+        ACCEL_TASK_PRIORITY,
+        &Task_Accel_Handle
     );
 
     // Endless Task Loop.
     while(1) {
-        // Play song anytime button is hit.
-        while(!isButtonPressed()) {};
-        playMelody(&sampleMelody);
-        while(isButtonPressed()) {};
+        // setup blue LED
+        P2->DIR |= BIT2;
+        P2->OUT &= ~BIT2;
+
+        // Set LED on right tilt.
+        while((accelDir() != RIGHT)) {};
+        P2->OUT |= BIT2;
+
+        // Reset LED on left tile + back to center.
+        while((accelDir() != LEFT)) {};
+        while((accelDir() != CENTER)) {};
     }
 }
 

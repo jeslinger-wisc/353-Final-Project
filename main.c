@@ -51,6 +51,7 @@ int main(void)
     // Initialize hardware resources.
     initTaskButton();
     initTaskBuzzer();
+    initTaskAccel();
 
     // Create main menu task.
     xTaskCreate
@@ -58,10 +59,9 @@ int main(void)
         "Task Menu",
         configMINIMAL_STACK_SIZE,
         NULL,
-        3,
+        MENU_TASK_PRIORITY,
         &Task_Menu_Handle
     );
-
 
     // Start the FreeRTOS scheduler.
     vTaskStartScheduler();
