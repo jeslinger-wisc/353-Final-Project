@@ -11,6 +11,7 @@
 // Standard includes for ece353 firmware.
 #include "msp.h"
 #include "msp432p401r.h"
+#include <stdbool.h>
 #include <stdint.h>
 #include <stdio.h>
 
@@ -19,7 +20,7 @@
 #include <task.h>
 
 // Application header files.
-#include "menu_task.h"
+#include "task_menu.h"
 
 
 #endif /* MAIN_H_ */

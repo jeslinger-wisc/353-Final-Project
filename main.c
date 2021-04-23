@@ -52,12 +52,12 @@ int main(void)
 
     // Create main menu task.
     xTaskCreate
-    (   menu_task,
-        "Menu Task",
+    (   task_menu,
+        "Task Menu",
         configMINIMAL_STACK_SIZE,
         NULL,
         3,
-        &Menu_Task_Handle
+        &Task_Menu_Handle
     );
 
 

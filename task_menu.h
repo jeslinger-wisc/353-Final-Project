@@ -1,15 +1,16 @@
 /*
- * menu_task.h
+ * task_menu.h
  *
  *  Created on: Apr 22, 2021
  *      Author: John Eslinger
  */
 
-#ifndef MENU_TASK_H_
-#define MENU_TASK_H_
+#ifndef TASK_MENU_H_
+#define TASK_MENU_H_
 
 // Standard includes for ece353 firmware.
 #include "msp.h"
+#include <stdbool.h>
 #include <stdint.h>
 #include <stdio.h>
 
@@ -17,8 +18,14 @@
 #include <FreeRTOS.h>
 #include <task.h>
 
-// Function handle and declaration for Menu Task.
-extern TaskHandle_t Menu_Task_Handle;
-void menu_task(void *pvParameters);
+// Application header files.
+#include "config.h"
+#include "task_button.h"
 
-#endif /* MENU_TASK_H_ */
+// Function handle and declaration for Menu Task.
+extern TaskHandle_t Task_Menu_Handle;
+void task_menu(void *pvParameters);
+
+extern int CHECK;
+
+#endif /* TASK_MENU_H_ */
