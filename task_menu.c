@@ -25,9 +25,22 @@ void task_menu(void *pvParameters) {
         &Task_Button_Handle
     );
 
+    // Create Buzzer Task (temporarily with same priority).
+    xTaskCreate
+    (   task_buzzer,
+        "Task Buzzer",
+        configMINIMAL_STACK_SIZE,
+        NULL,
+        3,
+        &Task_Buzzer_Handle
+    );
+
     // Endless Task Loop.
     while(1) {
-        // Spin for now.
+        // Play song anytime button is hit.
+        while(!isButtonPressed()) {};
+        playMelody(&sampleMelody);
+        while(isButtonPressed()) {};
     }
 }
 

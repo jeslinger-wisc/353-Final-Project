@@ -15,4 +15,8 @@
 #define BUTTON_DEBOUNCE_VALUE   10
 #define BUTTON_PERIOD_DELAY     5
 
+// Buzzer Task Configs
+#define BUZZER_BPM              80
+#define BUZZER_QUEUE_SIZE       10
+
 #endif /* CONFIG_H_ */

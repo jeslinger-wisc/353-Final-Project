@@ -21,6 +21,7 @@
 // Application header files.
 #include "config.h"
 #include "task_button.h"
+#include "task_buzzer.h"
 
 // Function handle and declaration for Menu Task.
 extern TaskHandle_t Task_Menu_Handle;

@@ -49,6 +49,8 @@ int main(void)
     WDT_A->CTL = WDT_A_CTL_PW | WDT_A_CTL_HOLD;
 
     // Initialize hardware resources.
+    initTaskButton();
+    initTaskBuzzer();
 
     // Create main menu task.
     xTaskCreate
