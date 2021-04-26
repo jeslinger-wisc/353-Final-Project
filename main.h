@@ -8,19 +8,11 @@
 #ifndef MAIN_H_
 #define MAIN_H_
 
-// Standard includes for ece353 firmware.
-#include "msp.h"
-#include "msp432p401r.h"
-#include <stdbool.h>
-#include <stdint.h>
-#include <stdio.h>
-
-// RTOS header files.
-#include <FreeRTOS.h>
-#include <task.h>
-
-// Application header files.
+#include "commonHeaders.h"
 #include "task_menu.h"
-
+#include "task_accel.h"
+#include "task_button.h"
+#include "task_buzzer.h"
+#include "task_light.h"
 
 #endif /* MAIN_H_ */

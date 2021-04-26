@@ -7,23 +7,77 @@
 
 #include "task_accel.h"
 
-// Handle for Accelerometer Task.
-TaskHandle_t Task_Accel_Handle = NULL;
+// Handle for Accelerometer Task (and sub-task).
+static TaskHandle_t Task_Accel_Handle = NULL;
+static TaskHandle_t Task_Accel_Bottom_Half_Handle = NULL;
 
-// Handle for the Accelerometer Task's bottom half sub-task.
-TaskHandle_t Task_Accel_Bottom_Half_Handle = NULL;
-
-// Overall state of the accelerometer on the MKII booster pack.
+// Vars to record the general state of the Accelerometer Task.
+static volatile bool IS_LIVE = false;
 static volatile dir_t ACCEL_DIR = CENTER;
 
-// Allow task_accel to see task_accel_botom_hald.
-void task_accel_bottom_half(void *pvParameters);
+/*
+ * Accelerometer Task:
+ * JohnEsl-TODO
+ */
+static void task_accel(void *pvParameters) {
+    // Endless Task Loop.
+    while (1) {
+        // Start ADC conversion.
+        ADC14->CTL0 |= ADC14_CTL0_SC | ADC14_CTL0_ENC;
+
+        // Delay before starting next conversion.
+        vTaskDelay(pdMS_TO_TICKS(ACCEL_PERIOD_DELAY));
+    }
+}
 
 /*
- * Initialization function used to initialize hardware resources to use the
- * accelerometer x-axis sensor on the MKII booster pack.
+ * Accelerometer Bottom Half Sub-Task:
+ * JohnEsl-TODO
  */
-void initTaskAccel(void) {
+static void task_accel_bottom_half(void *pvParameters) {
+    // Var to get current accelerometer reading.
+    uint32_t xaxisValue = 0;
+
+    // Endless Task Loop.
+    while (1) {
+        // Get/Wait for task notification with x-axis value.
+        if (xTaskNotifyWait(0, 0, &xaxisValue, portMAX_DELAY) != pdPASS) {
+            continue;
+        }
+
+        // Update the recorded state of the accelerometer.
+        ACCEL_DIR = CENTER;
+        if (xaxisValue < (ACCEL_CENTER_SAMPLE - ACCEL_CENTER_THRESH)) {
+            ACCEL_DIR = LEFT;
+        }
+        else if (xaxisValue > (ACCEL_CENTER_SAMPLE + ACCEL_CENTER_THRESH)) {
+            ACCEL_DIR = RIGHT;
+        }
+    }
+}
+
+/*
+ * Getter function to determine the direction the MKII booster pack is
+ * being tilted (with regards to the x-axis accelerometer facing the
+ * negative y-axis direction).
+ *
+ * Returns direction MKII booster pack is being tilted
+ */
+dir_t getDirection(void) {
+    return ACCEL_DIR;
+}
+
+/*
+ * Initializes hardware/software resources and creates Accelerometer Task.
+ *
+ * Returns 0 for successful setup, -1 otherwise.
+ */
+int initTaskAccel(void) {
+    // Allow only one Accelerometer Task instance at a time.
+    if (IS_LIVE) {
+        return -1;
+    }
+
     // Configure pin to x-axis accelerometer as analog input.
     P6->DIR &= ~BIT1;
     P6->SEL0 |= BIT1; // select = 2'b11
@@ -48,68 +102,53 @@ void initTaskAccel(void) {
 
     // Turn ADC on.
     ADC14->CTL0 |= ADC14_CTL0_ON;
+
+    // Create Accelerometer Task.
+    BaseType_t result = xTaskCreate(task_accel,
+                                    "Accelerometer Task",
+                                    configMINIMAL_STACK_SIZE,
+                                    NULL,
+                                    CONTROL_PRIORITY,
+                                    &Task_Accel_Handle
+                                    );
+    if (result != pdPASS) {
+        return -1;
+    }
+
+    // Create Accelerometer Bottom Half Task.
+    BaseType_t result2 = xTaskCreate(task_accel_bottom_half,
+                                    "Accelerometer Bottom Half Task",
+                                    configMINIMAL_STACK_SIZE,
+                                    NULL,
+                                    CONTROL_PRIORITY,
+                                    &Task_Accel_Bottom_Half_Handle
+                                    );
+    if (result2 != pdPASS) {
+        vTaskDelete(Task_Accel_Handle); // All or nothing
+        return -1;
+    }
+
+    // Return for successful setup.
+    return 0;
 }
 
 /*
- * Getter function to determine the direction the MKII booster pack is
- * being tilted (with regards to the x-axis accelerometer facing the
- * negative y-axis direction).
+ * Tears down hardware/software resources and deletes Accelerometer Task.
  *
- * Returns direction MKII booster pack is being tilted
+ * Returns 0 for successful setup, -1 otherwise.
  */
-dir_t accelDir(void) {
-    return ACCEL_DIR;
-}
-
-/*
- * Function for Accelerometer Task.
- * JohnEsl-TODO
- */
-void task_accel(void *pvParameters) {
-    // Begin bottom half sub-task.
-    xTaskCreate
-    (   task_accel_bottom_half,
-        "Task Accel Bottom Half",
-        configMINIMAL_STACK_SIZE,
-        NULL,
-        ACCEL_TASK_PRIORITY,
-        &Task_Accel_Bottom_Half_Handle
-    );
-
-    // Endless Task Loop.
-    while (1) {
-        // Start ADC conversion.
-        ADC14->CTL0 |= ADC14_CTL0_SC | ADC14_CTL0_ENC;
-
-        // Delay before starting next conversion.
-        vTaskDelay(pdMS_TO_TICKS(ACCEL_PERIOD_DELAY));
+int killTaskAccel(void) {
+    // Only kill task if able to.
+    if (!(IS_LIVE)) {
+        return -1;
     }
-}
 
-/*
- * Function for Accelerometer Task bottom half sub-task.
- * JohnEsl-TODO
- */
-void task_accel_bottom_half(void *pvParameters) {
-    // Var to hold the current x-axis value.
-    uint32_t xaxisValue;
+    // Delete Accelerometer Task and sub-task.
+    vTaskDelete(Task_Accel_Handle);
+    vTaskDelete(Task_Accel_Bottom_Half_Handle);
 
-    // Endless Task Loop.
-    while (1) {
-        // Get/Wait for task notification with x-axis value.
-        if (xTaskNotifyWait(0, 0, &xaxisValue, portMAX_DELAY) != pdPASS) {
-            continue;
-        }
-
-        // Update the recorded state of the accelerometer.
-        ACCEL_DIR = CENTER;
-        if (xaxisValue < (ACCEL_CENTER_SAMPLE - ACCEL_CENTER_THRESH)) {
-            ACCEL_DIR = LEFT;
-        }
-        else if (xaxisValue > (ACCEL_CENTER_SAMPLE + ACCEL_CENTER_THRESH)) {
-            ACCEL_DIR = RIGHT;
-        }
-    }
+    // Return for successful deconstruction.
+    return 0;
 }
 
 /*

@@ -8,18 +8,7 @@
 #ifndef TASK_ACCEL_H_
 #define TASK_ACCEL_H_
 
-// Standard includes for ece353 firmware.
-#include "msp.h"
-#include <stdbool.h>
-#include <stdint.h>
-#include <stdio.h>
-
-// RTOS header files.
-#include <FreeRTOS.h>
-#include <task.h>
-
-// Application header files.
-#include "config.h"
+#include "commonHeaders.h"
 
 // Enum to define the possible states of the accelerometer.
 typedef enum AccelStates {
@@ -29,22 +18,26 @@ typedef enum AccelStates {
 } dir_t;
 
 /*
- * Initialization function used to initialize hardware resources to use the
- * accelerometer x-axis sensor on the MKII booster pack.
- */
-void initTaskAccel(void);
-
-/*
  * Getter function to determine the direction the MKII booster pack is
  * being tilted (with regards to the x-axis accelerometer facing the
  * negative y-axis direction).
  *
  * Returns direction MKII booster pack is being tilted
  */
-dir_t accelDir(void);
+dir_t getDirection(void);
 
-// Function handle and declaration for Accelerometer (Starting) Task.
-extern TaskHandle_t Task_Accel_Handle;
-void task_accel(void *pvParameters);
+/*
+ * Initializes hardware/software resources and creates Accelerometer Task.
+ *
+ * Returns 0 for successful setup, -1 otherwise.
+ */
+int initTaskAccel(void);
+
+/*
+ * Tears down hardware/software resources and deletes Accelerometer Task.
+ *
+ * Returns 0 for successful setup, -1 otherwise.
+ */
+int killTaskAccel(void);
 
 #endif /* TASK_ACCEL_H_ */

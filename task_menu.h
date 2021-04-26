@@ -8,24 +8,35 @@
 #ifndef TASK_MENU_H_
 #define TASK_MENU_H_
 
-// Standard includes for ece353 firmware.
-#include "msp.h"
-#include <stdbool.h>
-#include <stdint.h>
-#include <stdio.h>
+#include "commonHeaders.h"
 
-// RTOS header files.
-#include <FreeRTOS.h>
-#include <task.h>
-
-// Application header files.
-#include "config.h"
+// TODO remove as needed
 #include "task_button.h"
-#include "task_buzzer.h"
 #include "task_accel.h"
+#include "task_buzzer.h"
+#include "task_light.h"
 
-// Function handle and declaration for Menu Task.
-extern TaskHandle_t Task_Menu_Handle;
-void task_menu(void *pvParameters);
+/*
+ * Switches application back to "control" mode (assumably from "game"
+ * mode), waking up the Menu Task as needed and passing it the provided
+ * result.
+ *
+ * playerWon- result of assumed game, should be TRUE if player won the game.
+ */
+void switchToControlMode(bool playerWon);
+
+/*
+ * Initializes hardware/software resources and creates Menu Task.
+ *
+ * Returns 0 for successful setup, -1 otherwise.
+ */
+int initTaskMenu(void);
+
+/*
+ * Tears down hardware/software resources and deletes Menu Task.
+ *
+ * Returns 0 for successful setup, -1 otherwise.
+ */
+int killTaskMenu(void);
 
 #endif /* TASK_MENU_H_ */

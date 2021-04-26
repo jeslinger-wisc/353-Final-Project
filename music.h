@@ -8,18 +8,7 @@
 #ifndef MUSIC_H_
 #define MUSIC_H_
 
-// Standard includes for ece353 firmware.
-#include "msp.h"
-#include <stdbool.h>
-#include <stdint.h>
-#include <stdio.h>
-
-// RTOS header files.
-#include <FreeRTOS.h>
-#include <task.h>
-
-// Application header files.
-#include "config.h"
+#include "commonHeaders.h"
 
 // Note Periods for common notes (assuming 24 MHz clock frequency).
 #define NOTE_G5        30612 // 784 Hz

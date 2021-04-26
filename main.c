@@ -48,20 +48,14 @@ int main(void)
     // Stop Watchog Timer.
     WDT_A->CTL = WDT_A_CTL_PW | WDT_A_CTL_HOLD;
 
-    // Initialize hardware resources.
-    initTaskButton();
-    initTaskBuzzer();
-    initTaskAccel();
+    // Initialize Menu Task.
+    initTaskMenu();
 
-    // Create main menu task.
-    xTaskCreate
-    (   task_menu,
-        "Task Menu",
-        configMINIMAL_STACK_SIZE,
-        NULL,
-        MENU_TASK_PRIORITY,
-        &Task_Menu_Handle
-    );
+    // Initialize IO Tasks.
+    initTaskButton();
+    initTaskAccel();
+    initTaskBuzzer();
+    initTaskLight();
 
     // Start the FreeRTOS scheduler.
     vTaskStartScheduler();

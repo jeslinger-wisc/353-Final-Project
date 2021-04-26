@@ -8,38 +8,38 @@
 #ifndef TASK_BUZZER_H_
 #define TASK_BUZZER_H_
 
-// Standard includes for ece353 firmware.
-#include "msp.h"
-#include <stdbool.h>
-#include <stdint.h>
-#include <stdio.h>
-
-// RTOS header files.
-#include <FreeRTOS.h>
-#include <semphr.h>
-#include <task.h>
-
-// Application header files.
-#include "config.h"
+#include"commonHeaders.h"
 #include "music.h"
 
 /*
- * Initialization function used to initialize hardware resources to use the
- * buzzer on the MKII booster pack.
+ * "Getter" method returning the state of the buzzer regarding any currenly
+ * playing melodies.
+ *
+ * Returns TRUE if playing a melody, FALSE otherwise
  */
-void initTaskBuzzer(void);
+bool isPlayingMelody(void);
 
 /*
  * Queues given melody to be played on the buzzer.
  *
  * melody- melody to queue to be played on buzzer.
  *
- * Returns pdPASS if melody queued, errQUEUE_FULL otherwise.
+ * Returns TRUE is melody queued, FASLE otherwise.
  */
-BaseType_t playMelody(melody_t* melody);
+bool queueMelody(melody_t* melody);
 
-// Function handle and declaration for Buzzer Task.
-extern TaskHandle_t Task_Buzzer_Handle;
-void task_buzzer(void *pvParameters);
+/*
+ * Initializes hardware/software resources and creates Buzzer Task.
+ *
+ * Returns 0 for successful setup, -1 otherwise.
+ */
+int initTaskBuzzer(void);
+
+/*
+ * Tears down hardware/software resources and deletes Buzzer Task.
+ *
+ * Returns 0 for successful setup, -1 otherwise.
+ */
+int killTaskBuzzer(void);
 
 #endif /* TASK_BUZZER_H_ */
