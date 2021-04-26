@@ -24,7 +24,6 @@
 #include "task_buzzer.h"
 #include "task_accel.h"
 #include "task_space_ship.h"
-#include "task_joystick.h"
 
 // Function handle and declaration for Menu Task.
 extern TaskHandle_t Task_Menu_Handle;
