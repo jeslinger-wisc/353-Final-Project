@@ -10,7 +10,7 @@
 
 // Group Priority Levels
 #define CONTROL_PRIORITY        3 // Priority of game management tasks
-#define GAME_PRIORITY           3 // Priority of gameplay tasks
+#define GAME_PRIORITY           2 // Priority of gameplay tasks
 
 // Button Task Configs
 #define BUTTON_DEBOUNCE_VALUE   10 // # of consecutive pressed samples for "pressed" state
@@ -27,13 +27,19 @@
 
 // Light Sensor Task Configs
 #define LIGHT_PERIOD_DELAY      5   // Time (ms) between checking the light sensor
-#define LIGHT_DARK_THRESH       100 // Largest lux value that registers as "dark"
+#define LIGHT_DARK_THRESH       0   // Largest lux value that registers as "dark"
 
 // LCD Task Configs
 #define LCD_QUEUE_SIZE          15 // Size of queue for pending images
 
 // Player Task Configs
 #define PLAYER_PERIOD_DELAY     32
+
+// Enemy Task Configs
+#define ENEMY_COUNT             7   // Number of enemies displayed per game
+#define ENEMY_PERIOD_DELAY      5   // Time (ms) between updating enemies
+#define ENEMY_Y_ENDGAME         100 // Y value enemies must reach in order to force the game to end
+#define ENEMY_SHOOT_CHANCE      200 // Fractional chance a given enemy will shoot its laser (i.e. 1/x)
 
 #endif /* CONFIG_H_ */
 

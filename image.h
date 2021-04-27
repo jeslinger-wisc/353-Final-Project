@@ -25,4 +25,7 @@ typedef struct LCD_Struct {
 // Sample image.
 LCD_t sampleImage(void);
 
+// Enemy image.
+LCD_t enemyImage(void);
+
 #endif /* IMAGE_H_ */

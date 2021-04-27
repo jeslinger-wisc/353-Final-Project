@@ -26,7 +26,7 @@ static bool playGame(void) {
     uint32_t playerWon;
 
     // Create game tasks.
-    // TODO
+    initTaskEnemy();
 
     // Lower priority of IO tasks to game priority.
     setTaskAccelPriority(GAME_PRIORITY);
@@ -41,7 +41,7 @@ static bool playGame(void) {
     IS_AWAKE = true;
 
     // Delete game tasks.
-    // TODO
+    killTaskEnemy();
 
     // Pull up IO task priorities to use in control mode.
     setTaskAccelPriority(CONTROL_PRIORITY);
@@ -59,8 +59,14 @@ static bool playGame(void) {
  * JohnEsl-TODO
  */
 static void task_menu(void *pvParameters) {
+    P2->DIR |= BIT2;
+    P2->OUT &= ~BIT2;
+
     // Endless Task Loop.
     while (1) {
+        while(!isButtonPressed()){};
+        playGame();
+        P2->OUT |= BIT2;
     }
 }
 

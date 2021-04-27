@@ -58,3 +58,31 @@ LCD_t sampleImage(void) {
     };
     return sampleImage;
 }
+
+// Enemy image.
+const uint8_t enemyBitmaps[] =
+{
+    0x00, 0x00, //   --------------
+    0x03, 0x00, //   ------##------
+    0x06, 0x80, //   -----##-#-----
+    0x04, 0x80, //   -----#--#-----
+    0x0C, 0xE0, //   ----##--###---
+    0x14, 0xA0, //   ---#-#--#-#---
+    0x67, 0x98, //   -##--####--##-
+    0x44, 0x88, //   -#---#--#---#-
+    0x7F, 0xB8, //   -########-###-
+    0x48, 0x48, //   -#--#----#--#-
+    0x08, 0x40, //   ----#----#----
+    0x00, 0x00, //   --------------
+};
+LCD_t enemyImage(void) {
+    LCD_t sampleImage = { .x = LCD_HORIZONTAL_MAX / 2,
+                          .y = LCD_VERTICAL_MAX / 2,
+                          .image_width_pixels = 14,
+                          .image_height_pixels = 12,
+                          .image = enemyBitmaps,
+                          .fColor = LCD_COLOR_MAGENTA,
+                          .bColor = LCD_COLOR_BLACK,
+    };
+    return sampleImage;
+}
