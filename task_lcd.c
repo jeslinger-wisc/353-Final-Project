@@ -49,6 +49,17 @@ void task_lcd(void *pvParameters) {
 }
 
 /*
+ * "Clears" screen by setting every pixel to black.
+ */
+void clearScreen(void) {
+    lcd_draw_rectangle(LCD_HORIZONTAL_MAX/ 2,
+                       LCD_VERTICAL_MAX/ 2,
+                       LCD_HORIZONTAL_MAX,
+                       LCD_VERTICAL_MAX,
+                       LCD_COLOR_BLACK);
+}
+
+/*
  * Sets the priority of the LCD Task.
  *
  * pLvl- Priority Level to set the task to.

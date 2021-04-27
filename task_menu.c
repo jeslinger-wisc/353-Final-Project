@@ -37,7 +37,7 @@ static bool playGame(void) {
 
     // Put Menu task to sleep- restarts here after wakeup.
     IS_AWAKE = false;
-    playerWon = xTaskNotifyWait(0, 0, &playerWon, portMAX_DELAY);
+    xTaskNotifyWait(0, 0, &playerWon, portMAX_DELAY);
     IS_AWAKE = true;
 
     // Delete game tasks.
@@ -59,14 +59,35 @@ static bool playGame(void) {
  * JohnEsl-TODO
  */
 static void task_menu(void *pvParameters) {
-    P2->DIR |= BIT2;
-    P2->OUT &= ~BIT2;
+    // Display starting screen.
+    LCD_t title = titleImage();
+    LCD_t begin = beginImage();
+    clearScreen();
+    LCDget(&title);
+    LCDget(&begin);
 
     // Endless Task Loop.
     while (1) {
-        while(!isButtonPressed()){};
-        playGame();
-        P2->OUT |= BIT2;
+        // Wait for starting button press.
+        while (!isButtonPressed()) {};
+
+        // Clear screen for gameplay.
+        clearScreen();
+
+        // Play game.
+        bool playerWon = playGame();
+
+        // Display appropriate message.
+        clearScreen();
+        LCDget(&title); // Saved from initialization
+        if (playerWon) {
+            LCD_t won = winImage();
+            LCDget(&won);
+        }
+        else {
+            LCD_t lost = loseImage();
+            LCDget(&lost);
+        }
     }
 }
 
@@ -87,7 +108,8 @@ void switchToControlMode(bool playerWon) {
     vTaskPrioritySet(Task_Menu_Handle, CONTROL_PRIORITY);
 
     // Notify/Wakeup Menu Task.
-    xTaskNotify(Task_Menu_Handle, playerWon, eSetValueWithOverwrite);
+    uint32_t txValue = (playerWon) ? 1 : 0;
+    xTaskNotify(Task_Menu_Handle, txValue, eSetValueWithOverwrite);
 }
 
 /*

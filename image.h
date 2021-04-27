@@ -28,4 +28,16 @@ LCD_t sampleImage(void);
 // Enemy image.
 LCD_t enemyImage(void);
 
+// Title image.
+LCD_t titleImage(void);
+
+// Beginning instructions image.
+LCD_t beginImage(void);
+
+// Lose image.
+LCD_t loseImage(void);
+
+// Win image.
+LCD_t winImage(void);
+
 #endif /* IMAGE_H_ */

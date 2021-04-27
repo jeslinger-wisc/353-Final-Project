@@ -37,8 +37,8 @@
 
 // Enemy Task Configs
 #define ENEMY_COUNT             7   // Number of enemies displayed per game
-#define ENEMY_PERIOD_DELAY      5   // Time (ms) between updating enemies
-#define ENEMY_Y_ENDGAME         100 // Y value enemies must reach in order to force the game to end
+#define ENEMY_PERIOD_DELAY      1   // Time (ms) between updating enemies
+#define ENEMY_Y_ENDGAME         66 // Y value enemies must reach in order to force the game to end
 #define ENEMY_SHOOT_CHANCE      200 // Fractional chance a given enemy will shoot its laser (i.e. 1/x)
 
 #endif /* CONFIG_H_ */
