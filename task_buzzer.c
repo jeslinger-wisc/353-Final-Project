@@ -134,6 +134,7 @@ int initTaskBuzzer(void) {
                                     &Task_Buzzer_Handle
                                     );
     if (result != pdPASS) {
+        vQueueDelete(Queue_Buzzer);
         return -1;
     }
 

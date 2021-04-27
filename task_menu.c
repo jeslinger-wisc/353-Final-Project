@@ -25,14 +25,14 @@ static void task_menu(void *pvParameters) {
     // Turn off LED
     P2->OUT &= ~BIT2;
 
+    LCD_t test = sampleImage;
+
     // Endless Task Loop.
     while (1) {
-        if (isDark()) {
-            P2->OUT |= BIT2;
-        }
-        else {
-            P2->OUT &= ~BIT2;
-        }
+        while(!isButtonPressed()){};
+        LCDget(&test);
+        test.x += 5;
+        while(isButtonPressed()){};
     }
 }
 

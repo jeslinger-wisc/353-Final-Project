@@ -29,6 +29,9 @@
 #define LIGHT_PERIOD_DELAY      5   // Time (ms) between checking the light sensor
 #define LIGHT_DARK_THRESH       100 // Largest lux value that registers as "dark"
 
+// LCD Task Configs
+#define LCD_QUEUE_SIZE        15 // Size of queue for pending images
+
 #endif /* CONFIG_H_ */
 
 // Priority level check

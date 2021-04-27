@@ -56,6 +56,7 @@ int main(void)
     initTaskAccel();
     initTaskBuzzer();
     initTaskLight();
+    initTaskLCD();
 
     // Start the FreeRTOS scheduler.
     vTaskStartScheduler();
