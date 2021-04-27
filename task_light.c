@@ -35,6 +35,15 @@ static void task_light(void *pvParameters) {
 }
 
 /*
+ * Sets the priority of the Light Sensor Task.
+ *
+ * pLvl- Priority Level to set the task to.
+ */
+void setTaskLightPriority(uint32_t pLvl) {
+    vTaskPrioritySet(Task_Light_Handle, pLvl);
+}
+
+/*
  * Getter method that returns the general state of the light sensor.
  *
  * Returns TRUE if light sensor detects darkness, FALSE otherwise.
@@ -71,6 +80,8 @@ int initTaskLight(void) {
     }
 
     // Return for successful setup.
+    IS_LIVE = true;
+    IS_DARK = false;
     return 0;
 }
 
@@ -89,5 +100,6 @@ int killTaskLight(void) {
     vTaskDelete(Task_Light_Handle);
 
     // Return for successful deconstruction.
+    IS_LIVE = false;
     return 0;
 }

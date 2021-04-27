@@ -11,6 +11,13 @@
 #include "commonHeaders.h"
 
 /*
+ * Sets the priority of the Button Task.
+ *
+ * pLvl- Priority Level to set the task to.
+ */
+void setTaskButtonPriority(uint32_t pLvl);
+
+/*
  * Getter method that returns de-bounced state of the S2 button on the
  * MKII booster pack.
  *

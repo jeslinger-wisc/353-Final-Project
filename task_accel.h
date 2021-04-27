@@ -18,6 +18,13 @@ typedef enum AccelStates {
 } dir_t;
 
 /*
+ * Sets the priority of the Accelerometer Task.
+ *
+ * pLvl- Priority Level to set the task to.
+ */
+void setTaskAccelPriority(uint32_t pLvl);
+
+/*
  * Getter function to determine the direction the MKII booster pack is
  * being tilted (with regards to the x-axis accelerometer facing the
  * negative y-axis direction).

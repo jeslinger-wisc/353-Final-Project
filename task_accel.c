@@ -57,6 +57,16 @@ static void task_accel_bottom_half(void *pvParameters) {
 }
 
 /*
+ * Sets the priority of the Accelerometer Task.
+ *
+ * pLvl- Priority Level to set the task to.
+ */
+void setTaskAccelPriority(uint32_t pLvl) {
+    vTaskPrioritySet(Task_Accel_Handle, pLvl);
+    vTaskPrioritySet(Task_Accel_Bottom_Half_Handle, pLvl);
+}
+
+/*
  * Getter function to determine the direction the MKII booster pack is
  * being tilted (with regards to the x-axis accelerometer facing the
  * negative y-axis direction).
@@ -129,6 +139,8 @@ int initTaskAccel(void) {
     }
 
     // Return for successful setup.
+    IS_LIVE = true;
+    ACCEL_DIR = CENTER;
     return 0;
 }
 
@@ -148,6 +160,7 @@ int killTaskAccel(void) {
     vTaskDelete(Task_Accel_Bottom_Half_Handle);
 
     // Return for successful deconstruction.
+    IS_LIVE = false;
     return 0;
 }
 

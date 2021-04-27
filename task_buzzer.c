@@ -72,6 +72,15 @@ void task_buzzer(void *pvParameters) {
 }
 
 /*
+ * Sets the priority of the Buzzer Task.
+ *
+ * pLvl- Priority Level to set the task to.
+ */
+void setTaskBuzzerPriority(uint32_t pLvl) {
+    vTaskPrioritySet(Task_Buzzer_Handle, pLvl);
+}
+
+/*
  * "Getter" method returning the state of the buzzer regarding any currenly
  * playing melodies.
  *
@@ -140,6 +149,7 @@ int initTaskBuzzer(void) {
 
     // Return for successful setup.
     IS_LIVE = true;
+    PLAYING_MELODY = false;
     return 0;
 }
 
@@ -161,5 +171,6 @@ int killTaskBuzzer(void) {
     vQueueDelete(Queue_Buzzer);
 
     // Return for successful deconstruction.
+    IS_LIVE = false;
     return 0;
 }

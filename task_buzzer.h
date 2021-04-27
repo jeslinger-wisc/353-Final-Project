@@ -12,6 +12,13 @@
 #include "music.h"
 
 /*
+ * Sets the priority of the Buzzer Task.
+ *
+ * pLvl- Priority Level to set the task to.
+ */
+void setTaskBuzzerPriority(uint32_t pLvl);
+
+/*
  * "Getter" method returning the state of the buzzer regarding any currenly
  * playing melodies.
  *

@@ -13,6 +13,13 @@
 #include "opt3001.h"
 
 /*
+ * Sets the priority of the Light Sensor Task.
+ *
+ * pLvl- Priority Level to set the task to.
+ */
+void setTaskLightPriority(uint32_t pLvl);
+
+/*
  * Getter method that returns the general state of the light sensor.
  *
  * Returns TRUE if light sensor detects darkness, FALSE otherwise.

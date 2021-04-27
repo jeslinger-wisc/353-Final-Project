@@ -40,6 +40,15 @@ static void task_button(void *pvParameters) {
 }
 
 /*
+ * Sets the priority of the Button Task.
+ *
+ * pLvl- Priority Level to set the task to.
+ */
+void setTaskButtonPriority(uint32_t pLvl) {
+    vTaskPrioritySet(Task_Button_Handle, pLvl);
+}
+
+/*
  * Getter method that returns de-bounced state of the S2 button on the
  * MKII booster pack.
  *
@@ -76,6 +85,8 @@ int initTaskButton(void) {
     }
 
     // Return for successful setup.
+    IS_LIVE = true;
+    IS_PRESSED = false;
     return 0;
 }
 
@@ -94,6 +105,7 @@ int killTaskButton(void) {
     vTaskDelete(Task_Button_Handle);
 
     // Return for successful deconstruction.
+    IS_LIVE = false;
     return 0;
 }
 

@@ -19,26 +19,48 @@ static volatile bool IS_AWAKE = false;
  * from "control" mode to "game" mode, waits for switchToControlMode()
  * to be called, then finishes switch back to "control" mode
  *
- * Returns TRUE if player won
+ * Returns TRUE if player won the played game.
  */
+static bool playGame(void) {
+    // Var to store the result of the game.
+    uint32_t playerWon;
+
+    // Create game tasks.
+    // TODO
+
+    // Lower priority of IO tasks to game priority.
+    setTaskAccelPriority(GAME_PRIORITY);
+    setTaskButtonPriority(GAME_PRIORITY);
+    setTaskBuzzerPriority(GAME_PRIORITY);
+    setTaskLCDPriority(GAME_PRIORITY);
+    setTaskLightPriority(GAME_PRIORITY);
+
+    // Put Menu task to sleep- restarts here after wakeup.
+    IS_AWAKE = false;
+    playerWon = xTaskNotifyWait(0, 0, &playerWon, portMAX_DELAY);
+    IS_AWAKE = true;
+
+    // Delete game tasks.
+    // TODO
+
+    // Pull up IO task priorities to use in control mode.
+    setTaskAccelPriority(CONTROL_PRIORITY);
+    setTaskButtonPriority(CONTROL_PRIORITY);
+    setTaskBuzzerPriority(CONTROL_PRIORITY);
+    setTaskLCDPriority(CONTROL_PRIORITY);
+    setTaskLightPriority(CONTROL_PRIORITY);
+
+    // Return the game's outcome.
+    return (playerWon > 0);
+}
 
 /*
  * Menu Task:
  * JohnEsl-TODO
  */
 static void task_menu(void *pvParameters) {
-    // set direction as an output
-    P2->DIR |= BIT2;
-
-    // Turn off LED
-    P2->OUT &= ~BIT2;
-
-    LCD_t test = sampleImage();
-
     // Endless Task Loop.
     while (1) {
-        initTaskPlayer();
-        while(1) {};
     }
 }
 
@@ -86,6 +108,8 @@ int initTaskMenu(void) {
     }
 
     // Return for successful setup.
+    IS_LIVE = true;
+    IS_AWAKE = true;
     return 0;
 }
 
@@ -104,5 +128,7 @@ int killTaskMenu(void) {
     vTaskDelete(Task_Menu_Handle);
 
     // Return for successful deconstruction.
+    IS_LIVE = false;
+    IS_AWAKE = false;
     return 0;
 }

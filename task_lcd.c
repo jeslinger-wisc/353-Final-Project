@@ -48,6 +48,15 @@ void task_lcd(void *pvParameters) {
     }
 }
 
+/*
+ * Sets the priority of the LCD Task.
+ *
+ * pLvl- Priority Level to set the task to.
+ */
+void setTaskLCDPriority(uint32_t pLvl) {
+    vTaskPrioritySet(Task_Lcd_Handle, pLvl);
+}
+
 // TODO
 BaseType_t LCDget(LCD_t* LCDimage) {
     return xQueueSendToBack(Queue_Lcd, LCDimage, portMAX_DELAY);

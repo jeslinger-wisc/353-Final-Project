@@ -12,6 +12,13 @@
 #include "image.h"
 #include "task_light.h"
 
+/*
+ * Sets the priority of the LCD Task.
+ *
+ * pLvl- Priority Level to set the task to.
+ */
+void setTaskLCDPriority(uint32_t pLvl);
+
 // TODO
 BaseType_t LCDget(LCD_t* LCDimage);
 
