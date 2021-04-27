@@ -139,6 +139,7 @@ int initTaskBuzzer(void) {
     }
 
     // Return for successful setup.
+    IS_LIVE = true;
     return 0;
 }
 

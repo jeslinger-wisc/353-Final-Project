@@ -87,6 +87,7 @@ int initTaskLCD(void) {
     }
 
     // Return for successful setup.
+    IS_LIVE = true;
     return 0;
 }
 
@@ -108,5 +109,6 @@ int killTaskLCD(void) {
     vQueueDelete(Queue_Lcd);
 
     // Return for successful deconstruction.
+    IS_LIVE = false;
     return 0;
 }

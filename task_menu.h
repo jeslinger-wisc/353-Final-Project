@@ -9,14 +9,13 @@
 #define TASK_MENU_H_
 
 #include "commonHeaders.h"
-
-// TODO remove as needed
-#include "task_button.h"
 #include "task_accel.h"
+#include "task_button.h"
 #include "task_buzzer.h"
 #include "task_lcd.h"
 #include "task_light.h"
-
+#include "task_menu.h"
+#include "task_player.h"
 
 /*
  * Switches application back to "control" mode (assumably from "game"

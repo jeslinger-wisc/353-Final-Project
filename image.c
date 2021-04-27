@@ -47,11 +47,14 @@ const uint8_t space_shipBitmaps[] =
     0x00, 0x0C, 0x00, 0x00, 0x01, 0x80, 0x00, //             ##                         ##
     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, //
 };
-LCD_t sampleImage = { .x = LCD_HORIZONTAL_MAX / 2,
-                      .y = LCD_VERTICAL_MAX / 2,
-                      .image_width_pixels = 52,
-                      .image_height_pixels = 36,
-                      .image = space_shipBitmaps,
-                      .fColor = LCD_COLOR_RED,
-                      .bColor = LCD_COLOR_BLACK
-};
+LCD_t sampleImage(void) {
+    LCD_t sampleImage = { .x = LCD_HORIZONTAL_MAX / 2,
+                          .y = LCD_VERTICAL_MAX / 2,
+                          .image_width_pixels = 52,
+                          .image_height_pixels = 36,
+                          .image = space_shipBitmaps,
+                          .fColor = LCD_COLOR_RED,
+                          .bColor = LCD_COLOR_BLACK,
+    };
+    return sampleImage;
+}

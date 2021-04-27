@@ -15,6 +15,14 @@ static volatile bool IS_LIVE = false;
 static volatile bool IS_AWAKE = false;
 
 /*
+ * Helper function that plays the main game. Switches application
+ * from "control" mode to "game" mode, waits for switchToControlMode()
+ * to be called, then finishes switch back to "control" mode
+ *
+ * Returns TRUE if player won
+ */
+
+/*
  * Menu Task:
  * JohnEsl-TODO
  */
@@ -25,14 +33,12 @@ static void task_menu(void *pvParameters) {
     // Turn off LED
     P2->OUT &= ~BIT2;
 
-    LCD_t test = sampleImage;
+    LCD_t test = sampleImage();
 
     // Endless Task Loop.
     while (1) {
-        while(!isButtonPressed()){};
-        LCDget(&test);
-        test.x += 5;
-        while(isButtonPressed()){};
+        initTaskPlayer();
+        while(1) {};
     }
 }
 

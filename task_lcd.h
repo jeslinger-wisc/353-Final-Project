@@ -10,7 +10,6 @@
 
 #include"commonHeaders.h"
 #include "image.h"
-#include "lcd.h"
 #include "task_light.h"
 
 // TODO

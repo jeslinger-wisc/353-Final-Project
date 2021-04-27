@@ -23,6 +23,6 @@ typedef struct LCD_Struct {
 } LCD_t;
 
 // Sample image.
-extern LCD_t sampleImage;
+LCD_t sampleImage(void);
 
 #endif /* IMAGE_H_ */
