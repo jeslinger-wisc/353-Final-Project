@@ -18,86 +18,110 @@ static volatile bool IS_LIVE = false;
  * JohnEsl-TODO
  */
 static void task_enemy(void *pvParameters) {
-    // Constant used for edge calculations.
-    const int enemyRadius = (newEnemyImage().image_width_pixels / 2) + 1;
+    // Often used constants for the Enemy Task.
+    const int enemyXRadius = (newEnemyImage().image_width_pixels / 2) + 1;
     const int enemyYRadius = (newEnemyImage().image_height_pixels / 2) + 1;
+    const int enemyWidth = newEnemyImage().image_width_pixels;
 
-    // Vars to record positional and directional data.
-    bool movingLeft = false;
-    uint16_t curY = ((newEnemyImage().image_height_pixels) / 2) + 1;
+    // Vars to record position/movement of enemies.
+    int leftLimit = 0;
+    int rightLimit = (ENEMY_COUNT * (enemyWidth + 1)) + 1;
+    int curY = enemyYRadius;
+    bool goingLeft = false;
 
-    // Array of enemy sprite info.
+    // Var to record number of enemies alive.
+    int enemiesAlive = ENEMY_COUNT;
+
+    // Array of enemy sprite information.
     LCD_t enemies[ENEMY_COUNT];
 
     // Initialize each enemy and display them.
-    int startX = ((newEnemyImage().image_width_pixels) / 2) + 1;
     int index = 0;
     for (; index < ENEMY_COUNT; index++) {
         // Set enemy details.
         enemies[index] = newEnemyImage();
 
-        // Adjust enemy location.
-        enemies[index].x = enemyRadius + (index * (newEnemyImage().image_width_pixels + 1));
+        //Adjust enemy location.
+        enemies[index].x = enemyXRadius + (index * (enemyWidth + 1));
         enemies[index].y = curY;
 
         // Display enemy.
-        LCDget(&enemies[index]);
+        LCDget(&(enemies[index]));
     }
 
     // Endless Task Loop.
-    while(1) {
+    while (1) {
         // Update each enemy.
         int index = 0;
-        for (; index < ENEMY_COUNT; index++) {
-            // Adjust to new position (dead enemies too- for movements).
-            enemies[index].x += (movingLeft) ? -1 : 1;
-            enemies[index].y = curY;
-
-            // Skip if already dead.
+        for(; index < ENEMY_COUNT; index++) {
+            // Skip if dead.
             if (enemies[index].image == NULL) {
                 continue;
             }
 
-            // Mark as dead if hit detected.
-            /*
-            int lIndex = 0;
-            for (; lIndex < LASER_COUNT; lIndex++) {
+            // Kill if hit detected.
+            int laserIndex = 0;
+            for (; laserIndex < LASER_COUNT; laserIndex++) {
                 // Get laser info.
-                LCD_t laser = getLaserInfo(lIndex);
+                volatile laser_t* laser = getLaserInfo(laserIndex);
 
-                // Skip if not an active laser.
-                if (laser.image == NULL) {
+                // Skip if not active.
+                if (laser->image.image == NULL) {
+                    continue;
+                }
+
+                // Skip if laser from enemy ship.
+                if (laser->goingUp) {
                     continue;
                 }
 
                 // Determine if laser is hitting enemy.
                 LCD_t enemy = enemies[index];
-                int laserRadius = (laserImage().image_width_pixels / 2);
-                if ((enemy.x - enemyRadius) > (laser.x + laserRadius)) {
+                int laserXRadius = (newLaserImage().image_width_pixels / 2) + 1;
+                int laserYRadius = (newLaserImage().image_height_pixels / 2) + 1;
+                if ((enemy.x - enemyXRadius) > (laser->image.x + laserXRadius)) {
                     continue;
                 }
-                else if ((enemy.x + enemyRadius) < (laser.x - laserRadius)) {
+                else if ((enemy.x + enemyXRadius) < (laser->image.x - laserXRadius)) {
                     continue;
                 }
-                else if ((enemy.y - enemyRadius) > (laser.y + laserRadius)) {
+                else if ((enemy.y - enemyYRadius) > (laser->image.y + laserYRadius)) {
                     continue;
                 }
-                else if ((enemy.y + enemyRadius) < (laser.y - laserRadius)) {
+                else if ((enemy.y + enemyYRadius) < (laser->image.y - laserYRadius)) {
                     continue;
                 }
                 else { // HIT!
-                    // "Delete" enemy and mark dead.
-                    enemy.fColor = LCD_COLOR_BLACK;
-                    LCDget(&enemy);
-                    enemy.image = NULL;
+                    // Kill enemy.
+                    enemies[index].fColor = LCD_COLOR_BLACK;
+                    LCDget(&(enemies[index]));
+                    enemies[index].image = NULL;
+
+                    // Play death melody.
+                    queueMelody(&enemyDeathMelody);
+
+                    /* Get rid of lasers on impact- leave out for now.
+                    // Kill laser.
+                    LCD_t img = laser->image; // convert to non-volatile.
+                    img.fColor = LCD_COLOR_BLACK;
+                    LCDget(&img);
+                    laser->image.image = NULL;
+                    */
+
+                    // Check if any enemies are left.
+                    enemiesAlive--;
+                    if (enemiesAlive <= 0) {
+                        switchToControlMode(true);
+                    }
+
+                    continue; // Don't process dead enemy.
                 }
             }
-            */
 
-            // Display enemy (as possible).
-            if (enemies[index].image != NULL) {
-                LCDget(&enemies[index]);
-            }
+            // Move enemy.
+            enemies[index].x += (goingLeft) ? -1 : 1;
+            enemies[index].y = curY;
+            LCDget(&(enemies[index]));
 
             // Attempt to shoot laser.
             if( (rand() % ENEMY_SHOOT_CHANCE) == 0) {
@@ -105,19 +129,19 @@ static void task_enemy(void *pvParameters) {
                                      .goingUp = true
                                    };
                 newLaser.image.x = enemies[index].x;
-                newLaser.image.y = enemies[index].y + enemyYRadius + 5;
+                newLaser.image.y = enemies[index].y + enemyYRadius + 1;
                 queueLaser(&newLaser);
-                // queueLaser(enemies[index].x, enemies[index].y, false);
+                queueMelody(&enemyShotMelody);
             }
         }
 
-        // Update direction/vertical position as needed.
-        if (!movingLeft && (enemies[ENEMY_COUNT - 1].x >= (LCD_HORIZONTAL_MAX - enemyRadius))) {
-            movingLeft = !movingLeft;
-            curY++;
-        }
-        else if (movingLeft && (enemies[0].x <= enemyRadius)) {
-            movingLeft = !movingLeft;
+        // Update end trackers.
+        leftLimit += (goingLeft) ? -1 : 1;
+        rightLimit += (goingLeft) ? -1 : 1;
+
+        // Change movement direction/Y-level as needed.
+        if ((leftLimit <= 0) || (rightLimit >= LCD_HORIZONTAL_MAX)) {
+            goingLeft = !goingLeft;
             curY++;
         }
 

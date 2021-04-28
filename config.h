@@ -12,12 +12,15 @@
 #define CONTROL_PRIORITY        3 // Priority of game management tasks
 #define GAME_PRIORITY           2 // Priority of gameplay tasks
 
+// Menu Task Configs
+#define MENU_KILL_DELAY         50
+
 // Button Task Configs
 #define BUTTON_DEBOUNCE_VALUE   10 // # of consecutive pressed samples for "pressed" state
 #define BUTTON_PERIOD_DELAY     5  // Time (ms) between button sampling
 
 // Buzzer Task Configs
-#define BUZZER_BPM              120 // Beats per minute to play melodies at
+#define BUZZER_BPM              180 // Beats per minute to play melodies at
 #define BUZZER_QUEUE_SIZE       10  // Size of queue for pending melodies
 
 // Accelerometer Task Configs
@@ -27,7 +30,7 @@
 
 // Light Sensor Task Configs
 #define LIGHT_PERIOD_DELAY      5   // Time (ms) between checking the light sensor
-#define LIGHT_DARK_THRESH       0   // Largest lux value that registers as "dark"
+#define LIGHT_DARK_THRESH       100   // Largest lux value that registers as "dark"
 
 // LCD Task Configs
 #define LCD_QUEUE_SIZE          15 // Size of queue for pending images
@@ -39,7 +42,7 @@
 #define ENEMY_COUNT             7   // Number of enemies displayed per game
 #define ENEMY_PERIOD_DELAY      1   // Time (ms) between updating enemies
 #define ENEMY_Y_ENDGAME         66 // Y value enemies must reach in order to force the game to end
-#define ENEMY_SHOOT_CHANCE      200 // Fractional chance a given enemy will shoot its laser (i.e. 1/x)
+#define ENEMY_SHOOT_CHANCE      1000 // Fractional chance a given enemy will shoot its laser (i.e. 1/x)
 
 // Laser Task Configs
 #define LASER_COUNT             10

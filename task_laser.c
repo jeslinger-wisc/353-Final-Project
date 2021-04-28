@@ -15,65 +15,64 @@ static QueueHandle_t Queue_Laser;
 
 // Vars to know the general state of the Laser Task.
 static volatile bool IS_LIVE = false;
-static volatile laser_t lasers[LASER_COUNT];
+static volatile laser_t LASERS[LASER_COUNT];
 
 /*
+ * TODO
  * Function for Laser Task.
  *
  */
 void task_laser(void *pvParameters) {
-    // Initialize array of lasers to be empty.
+    // Constant used within the Laser Task.
+    const int laserYRadius = (newLaserImage().image_height_pixels / 2) + 1;
+
+    // Initialize laser array to be empty.
     int index = 0;
-    for (; index < LASER_COUNT; index++) {
-        // Set initial details.
-        lasers[index].image = newLaserImage();
+    for (; index < LASER_COUNT; index ++) {
+        // Setup initial details.
+        LASERS[index].image = newLaserImage();
 
         // Set as empty.
-        lasers[index].image.image = NULL;
+        LASERS[index].image.image = NULL;
     }
 
     // Endless Task Loop.
     while (1) {
-        // Update all current lasers.
+        // Update current lasers.
         int index = 0;
         for (; index < LASER_COUNT; index++) {
-            // Skip if not active.
-            if (lasers[index].image.image == NULL) {
+            // Skip if not an active laser.
+            if (LASERS[index].image.image == NULL) {
                 continue;
             }
 
-            // Adjust laser coordinates.
-            lasers[index].image.y += (lasers[index].goingUp) ? 1 : -1;
+            // Nullify laser if at border.
+            int laserTop = LASERS[index].image.y + laserYRadius;
+            int laserBottom = LASERS[index].image.y - laserYRadius;
+            if ((laserBottom <= 0) || (laserTop >= LCD_HORIZONTAL_MAX)) {
+                LCD_t laserImage = LASERS[index].image; // convert to non-volatile
+                laserImage.fColor = LCD_COLOR_BLACK;
+                LCDget(&laserImage);
+                LASERS[index].image.image = NULL; // Nullify array slot's var
 
-            // Nullify laser if at height limit.
-            int laserYRadius = (newLaserImage().image_height_pixels / 2) + 1;
-            if ((lasers[index].image.y - laserYRadius) <= 0) {
-                LCD_t img = lasers[index].image; // convert to non-volatile.
-                img.fColor = LCD_COLOR_BLACK;
-                LCDget(&img);
-                lasers[index].image.image = NULL;
-            }
-            else if ((lasers[index].image.y + laserYRadius) >= LCD_VERTICAL_MAX) {
-                LCD_t img = lasers[index].image; // convert to non-volatile.
-                img.fColor = LCD_COLOR_BLACK;
-                LCDget(&img);
-                lasers[index].image.image = NULL;
+                continue; // Don't process inactive laser
             }
 
-            // Display laser.
-            LCD_t img = lasers[index].image; // convert to non-volatile.
-            LCDget(&img);
+            // Move/Display laser.
+            LASERS[index].image.y += (LASERS[index].goingUp) ? 1 : -1;
+            LCD_t laserImg = LASERS[index].image; // convert to non-volatile
+            LCDget(&laserImg);
         }
 
-        // Attempt to queue in new laser.
+        // Attempt to create a new laser.
         laser_t newLaser;
         if (xQueueReceive(Queue_Laser, &newLaser, 0) == pdPASS) {
-            // Find open spot for laser.
+            // Find open spot for laser (assuming one exists).
             int index = 0;
             for (; index < LASER_COUNT; index++) {
-                // Check if index is empty.
-                if (lasers[index].image.image == NULL) {
-                    lasers[index] = newLaser; // fill
+                // Fill in open spot if available.
+                if (LASERS[index].image.image == NULL) {
+                    LASERS[index] = newLaser; // fill
                     LCDget(&(newLaser.image)); // display
                     break;
                 }
@@ -94,7 +93,7 @@ void task_laser(void *pvParameters) {
  * Returns ptr to laser at the specified index
  */
 volatile laser_t* getLaserInfo(int index) {
-    return &(lasers[index]);
+    return &(LASERS[index]);
 }
 
 /*

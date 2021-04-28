@@ -24,8 +24,14 @@ void task_player(void *pvParameters) {
     playerImage.x = 64;
     playerImage.y = 110;
 
+    while(isButtonPressed()) {};
     // Endless Task Loop.
     while (1) {
+        if (isButtonPressed()) {
+            while(isButtonPressed()){};
+            switchToControlMode(true);
+        }
+        /*
         switch(getDirection())
                {
                 case  LEFT://MOVE LEFT
@@ -69,7 +75,7 @@ void task_player(void *pvParameters) {
                        break;
                    }
                }
-
+       */
        vTaskDelay(pdMS_TO_TICKS(PLAYER_PERIOD_DELAY));
     }
 }

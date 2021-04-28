@@ -28,6 +28,7 @@ static bool playGame(void) {
     // Create game tasks.
     initTaskEnemy();
     initTaskLaser();
+    initTaskPlayer();
 
     // Lower priority of IO tasks to game priority.
     setTaskAccelPriority(GAME_PRIORITY);
@@ -44,6 +45,10 @@ static bool playGame(void) {
     // Delete game tasks.
     killTaskEnemy();
     killTaskLaser();
+    killTaskPlayer();
+
+    // Give Idle Task time to clean up memory.
+    vTaskDelay(pdMS_TO_TICKS(MENU_KILL_DELAY));
 
     // Pull up IO task priorities to use in control mode.
     setTaskAccelPriority(CONTROL_PRIORITY);
@@ -61,10 +66,11 @@ static bool playGame(void) {
  * JohnEsl-TODO
  */
 static void task_menu(void *pvParameters) {
-    // Display starting screen.
+    // Display starting screen w/ music.
     clearScreen();
     LCDget(&titleImage);
     LCDget(&startImage);
+    queueMelody(&startMelody);
 
     // Endless Task Loop.
     while (1) {
@@ -77,14 +83,18 @@ static void task_menu(void *pvParameters) {
         // Play game.
         bool playerWon = playGame();
 
-        // Display appropriate message.
+        // Display/play appropriate message/melody.
         clearScreen();
         LCDget(&titleImage);
         if (playerWon) {
             LCDget(&winImage);
+            queueMelody(&winMelody);
+            while(isPlayingMelody()){};
         }
         else {
             LCDget(&loseImage);
+            queueMelody(&loseMelody);
+            while(isPlayingMelody()){};
         }
     }
 }

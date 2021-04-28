@@ -13,23 +13,6 @@
 #include "task_lcd.h"
 #include "task_player.h"
 
-/*
-// Enum to define the possible states of the accelerometer.
-typedef enum LaserState {
-    HIT,
-    MOVE,
-} laser_control_t;
-
-
-typedef struct Laser_Struct {
-    LCD_t laser;
-    uint16_t index;
-} laser_t;
-
-// TODO
-laser_t getLaserInfo(int index);
-*/
-
 // Struct to define laser sprites.
 typedef struct LaserType {
     LCD_t image;

@@ -11,6 +11,8 @@
 #include "commonHeaders.h"
 
 // Note Periods for common notes (assuming 24 MHz clock frequency).
+#define NOTE_E5        36419 // 659 Hz
+#define NOTE_F5        34384 // 698 Hz
 #define NOTE_G5        30612 // 784 Hz
 #define NOTE_A5        27273 // 880 Hz
 #define NOTE_A5S       26316 // 932 Hz
@@ -40,6 +42,7 @@
 // Durations for common lengths (assuming 4/4 time).
 #define QUARTER_NOTE (60000 / BUZZER_BPM)
 #define EIGTH_NOTE ((QUARTER_NOTE) / 2)
+#define SIXTEENTH_NOTE ((QUARTER_NOTE) / 4)
 #define HALF_NOTE ((QUARTER_NOTE) * 2)
 #define WHOLE_NOTE ((QUARTER_NOTE) * 4)
 
@@ -59,5 +62,23 @@ typedef struct MelodyStruct {
 
 // Sample melody
 extern melody_t sampleMelody;
+
+// Start game melody.
+extern melody_t startMelody;
+
+// Lose game melody.
+extern melody_t loseMelody;
+
+// Win game melody.
+extern melody_t winMelody;
+
+// Enemy Shot melody.
+extern melody_t enemyShotMelody;
+
+// Enemy Death melody.
+extern melody_t enemyDeathMelody;
+
+// Player Shot melody.
+extern melody_t playerShotMelody;
 
 #endif /* MUSIC_H_ */

@@ -31,8 +31,8 @@ void task_lcd(void *pvParameters) {
             continue;
         }
 
-        // Invert color of image for darker environments.
-        if (isDark()) {
+        // Invert color of image (unless black) for darker environments.
+        if (isDark() && (curImage.fColor != LCD_COLOR_BLACK)) {
             curImage.fColor = (curImage.fColor ^ 0xFFFF);
         }
 

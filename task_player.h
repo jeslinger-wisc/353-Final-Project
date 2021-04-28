@@ -13,6 +13,7 @@
 #include "task_accel.h"
 #include "task_button.h"
 #include "task_lcd.h"
+#include "task_menu.h"
 
 /*
  * Call when hit by laser
