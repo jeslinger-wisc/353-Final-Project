@@ -126,10 +126,10 @@ static void task_enemy(void *pvParameters) {
             // Attempt to shoot laser.
             if( (rand() % ENEMY_SHOOT_CHANCE) == 0) {
                 laser_t newLaser = { .image = newLaserImage(),
-                                     .goingUp = false
+                                     .goingUp = true
                                    };
                 newLaser.image.x = enemies[index].x;
-                newLaser.image.y = 100; //enemies[index].y + enemyYRadius + 1;
+                newLaser.image.y = enemies[index].y + enemyYRadius + 1;
                 queueLaser(&newLaser);
                 queueMelody(&enemyShotMelody);
             }
