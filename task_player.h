@@ -2,7 +2,7 @@
  * task_player.h
  *
  *  Created on: Apr 27, 2021
- *      Author: jesli
+ *      Author: Arman
  */
 
 #ifndef TASK_PLAYER_H_
@@ -15,9 +15,9 @@
 #include "task_lcd.h"
 
 /*
- * Call when hit by laser
+ * Call to detect if the player is hit by the laser
  */
-void markAsHit(void);
+void markAsHit(LCD_t* playerImage);
 
 /*
  * Initializes hardware/software resources and creates Player Task.
