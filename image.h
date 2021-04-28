@@ -29,6 +29,13 @@ typedef struct LCD_Struct {
  */
 LCD_t newEnemyImage(void);
 
+/*
+ * Generates and returns new laser LCD type.
+ *
+ * Returns LCD type with laser basic information
+ */
+LCD_t newLaserImage(void);
+
 // Global constant LCD_t for game's title image.
 extern const LCD_t titleImage;
 

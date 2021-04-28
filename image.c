@@ -41,6 +41,38 @@ LCD_t newEnemyImage(void) {
     return enemyImage;
 }
 
+// Laser Image.
+static const uint8_t Bitmaps_Lazer[] =
+{
+      0x00,
+      0x00,
+      0xF1,// ######       ######
+      0xF1, // ######       ######
+      0xF1, // ######       ######
+      0xF1,  // ######       ######
+      0xF1,  // ######       ######
+      0x00,
+      0x00,
+};
+
+/*
+ * Generates and returns new laser LCD type.
+ *
+ * Returns LCD type with laser basic information
+ */
+LCD_t newLaserImage(void) {
+    LCD_t laserImage = { .x = LCD_HORIZONTAL_MAX / 2,
+                         .y = LCD_VERTICAL_MAX / 2,
+                         .image_width_pixels = 5,
+                         .image_height_pixels = 9,
+                         .image = Bitmaps_Lazer,
+                         .fColor = LCD_COLOR_RED,
+                         .bColor = LCD_COLOR_BLACK,
+    };
+    return laserImage;
+}
+
+
 // Title Image.
 static const uint8_t titleBitmaps[] =
 {

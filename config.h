@@ -41,6 +41,10 @@
 #define ENEMY_Y_ENDGAME         66 // Y value enemies must reach in order to force the game to end
 #define ENEMY_SHOOT_CHANCE      200 // Fractional chance a given enemy will shoot its laser (i.e. 1/x)
 
+// Laser Task Configs
+#define LASER_COUNT             10
+#define LASER_PERIOD_DELAY      5
+
 #endif /* CONFIG_H_ */
 
 // Priority level check

@@ -27,6 +27,7 @@ static bool playGame(void) {
 
     // Create game tasks.
     initTaskEnemy();
+    initTaskLaser();
 
     // Lower priority of IO tasks to game priority.
     setTaskAccelPriority(GAME_PRIORITY);
@@ -42,6 +43,7 @@ static bool playGame(void) {
 
     // Delete game tasks.
     killTaskEnemy();
+    killTaskLaser();
 
     // Pull up IO task priorities to use in control mode.
     setTaskAccelPriority(CONTROL_PRIORITY);

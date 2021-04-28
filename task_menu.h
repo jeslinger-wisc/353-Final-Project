@@ -13,6 +13,7 @@
 #include "task_button.h"
 #include "task_buzzer.h"
 #include "task_enemy.h"
+#include "task_laser.h"
 #include "task_lcd.h"
 #include "task_light.h"
 #include "task_menu.h"

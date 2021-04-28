@@ -12,6 +12,7 @@
 
 #include "commonHeaders.h"
 #include "task_buzzer.h"
+#include "task_laser.h"
 #include "task_lcd.h"
 #include "task_menu.h"
 

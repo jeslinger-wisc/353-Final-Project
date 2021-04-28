@@ -20,6 +20,7 @@ static volatile bool IS_LIVE = false;
 static void task_enemy(void *pvParameters) {
     // Constant used for edge calculations.
     const int enemyRadius = (newEnemyImage().image_width_pixels / 2) + 1;
+    const int enemyYRadius = (newEnemyImage().image_height_pixels / 2) + 1;
 
     // Vars to record positional and directional data.
     bool movingLeft = false;
@@ -100,6 +101,12 @@ static void task_enemy(void *pvParameters) {
 
             // Attempt to shoot laser.
             if( (rand() % ENEMY_SHOOT_CHANCE) == 0) {
+                laser_t newLaser = { .image = newLaserImage(),
+                                     .goingUp = true
+                                   };
+                newLaser.image.x = enemies[index].x;
+                newLaser.image.y = enemies[index].y + enemyYRadius + 5;
+                queueLaser(&newLaser);
                 // queueLaser(enemies[index].x, enemies[index].y, false);
             }
         }
