@@ -100,13 +100,13 @@ static void task_enemy(void *pvParameters) {
                     // Play death melody.
                     queueMelody(&enemyDeathMelody);
 
-                    /* Get rid of lasers on impact- leave out for now.
+                    //* Get rid of lasers on impact- leave out for now.
                     // Kill laser.
+                    laser->image.image = NULL;
                     LCD_t img = laser->image; // convert to non-volatile.
                     img.fColor = LCD_COLOR_BLACK;
                     LCDget(&img);
-                    laser->image.image = NULL;
-                    */
+                    //*/
 
                     // Check if any enemies are left.
                     enemiesAlive--;
@@ -126,10 +126,10 @@ static void task_enemy(void *pvParameters) {
             // Attempt to shoot laser.
             if( (rand() % ENEMY_SHOOT_CHANCE) == 0) {
                 laser_t newLaser = { .image = newLaserImage(),
-                                     .goingUp = true
+                                     .goingUp = false
                                    };
                 newLaser.image.x = enemies[index].x;
-                newLaser.image.y = enemies[index].y + enemyYRadius + 1;
+                newLaser.image.y = 100; //enemies[index].y + enemyYRadius + 1;
                 queueLaser(&newLaser);
                 queueMelody(&enemyShotMelody);
             }

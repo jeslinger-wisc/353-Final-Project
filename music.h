@@ -60,9 +60,6 @@ typedef struct MelodyStruct {
 // Available Melodies //
 ////////////////////////
 
-// Sample melody
-extern melody_t sampleMelody;
-
 // Start game melody.
 extern melody_t startMelody;
 
