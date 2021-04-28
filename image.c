@@ -2,65 +2,13 @@
  * image.c
  *
  *  Created on: Apr 26, 2021
- *      Author: jesli
+ *      Author: John Eslinger
  */
 
 #include "image.h"
 
-// Sample Image.
-const uint8_t space_shipBitmaps[] =
-{
-    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, //
-    0x00, 0x00, 0x03, 0xFC, 0x00, 0x00, 0x00, //                       ########
-    0x00, 0x00, 0x0F, 0xFF, 0x00, 0x00, 0x00, //                     ############
-    0x00, 0x00, 0x38, 0xFF, 0x80, 0x00, 0x00, //                   ###   #########
-    0x00, 0x00, 0x60, 0xFF, 0xC0, 0x00, 0x00, //                  ##     ##########
-    0x00, 0x00, 0x41, 0xFF, 0xE0, 0x00, 0x00, //                  #     ############
-    0x00, 0x00, 0xC1, 0xFF, 0xE0, 0x00, 0x00, //                 ##     ############
-    0x00, 0x00, 0x83, 0xFF, 0xF0, 0x00, 0x00, //                 #     ##############
-    0x00, 0x01, 0x83, 0xFF, 0xF0, 0x00, 0x00, //                ##     ##############
-    0x00, 0x05, 0x83, 0xFF, 0xF2, 0x00, 0x00, //              # ##     ##############  #
-    0x00, 0x3D, 0x83, 0xFF, 0xF7, 0x80, 0x00, //           #### ##     ############## ####
-    0x00, 0xFC, 0x83, 0xFF, 0xF7, 0xE0, 0x00, //         ######  #     ############## ######
-    0x01, 0xFC, 0xC3, 0xFF, 0xE7, 0xF8, 0x00, //        #######  ##    #############  ########
-    0x07, 0xFE, 0x63, 0xFF, 0xCF, 0xFE, 0x00, //      ##########  ##   ############  ###########
-    0x0F, 0xFF, 0x3F, 0xFF, 0x8F, 0xFF, 0x00, //     ############  ###############   ############
-    0x1F, 0xFF, 0x8F, 0xFE, 0x1F, 0xFF, 0x80, //    ##############   ###########    ##############
-    0x3C, 0x7F, 0xC0, 0x00, 0x7F, 0xC7, 0xC0, //   ####   #########               #########   #####
-    0x7C, 0x3F, 0xF0, 0x03, 0xFF, 0x87, 0xE0, //  #####    ##########          ###########    ######
-    0x3E, 0x3F, 0xFF, 0xFF, 0xFF, 0x87, 0xC0, //   #####   ###############################    #####
-    0x1F, 0xF8, 0x7F, 0xFF, 0x87, 0xFF, 0x80, //    ##########    ################    ############
-    0x0F, 0xFC, 0x3E, 0x1F, 0x87, 0xFF, 0x00, //     ##########    #####    ######    ###########
-    0x07, 0xFE, 0x7E, 0x1F, 0x8F, 0xFE, 0x00, //      ##########  ######    ######   ###########
-    0x01, 0xFF, 0xFF, 0x1F, 0xFF, 0xFC, 0x00, //        #################   ###################
-    0x00, 0xFF, 0xFF, 0xFF, 0xFF, 0xF8, 0x00, //         #####################################
-    0x00, 0x3F, 0xFF, 0xFF, 0xFF, 0xF0, 0x00, //           ##################################
-    0x00, 0x1F, 0xFF, 0xFF, 0xFF, 0xC0, 0x00, //            ###############################
-    0x00, 0x07, 0xFF, 0xFF, 0xFF, 0x00, 0x00, //              ###########################
-    0x00, 0x07, 0xFF, 0xFF, 0xFF, 0x00, 0x00, //              ###########################
-    0x00, 0x1F, 0xFF, 0xFF, 0xFF, 0x80, 0x00, //            ##############################
-    0x00, 0x1F, 0x81, 0xFE, 0x1F, 0xC0, 0x00, //            ######      ########    #######
-    0x00, 0x1F, 0x00, 0x00, 0x07, 0x80, 0x00, //            #####                     ####
-    0x00, 0x0E, 0x00, 0x00, 0x03, 0x80, 0x00, //             ###                       ###
-    0x00, 0x0C, 0x00, 0x00, 0x03, 0x80, 0x00, //             ##                        ###
-    0x00, 0x0C, 0x00, 0x00, 0x01, 0x80, 0x00, //             ##                         ##
-    0x00, 0x0C, 0x00, 0x00, 0x01, 0x80, 0x00, //             ##                         ##
-    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, //
-};
-LCD_t sampleImage(void) {
-    LCD_t sampleImage = { .x = LCD_HORIZONTAL_MAX / 2,
-                          .y = LCD_VERTICAL_MAX / 2,
-                          .image_width_pixels = 52,
-                          .image_height_pixels = 36,
-                          .image = space_shipBitmaps,
-                          .fColor = LCD_COLOR_RED,
-                          .bColor = LCD_COLOR_BLACK,
-    };
-    return sampleImage;
-}
-
-// Enemy image.
-const uint8_t enemyBitmaps[] =
+// Enemy Image.
+static const uint8_t enemyBitmaps[] =
 {
     0x00, 0x00, //   --------------
     0x03, 0x00, //   ------##------
@@ -75,20 +23,26 @@ const uint8_t enemyBitmaps[] =
     0x08, 0x40, //   ----#----#----
     0x00, 0x00, //   --------------
 };
-LCD_t enemyImage(void) {
-    LCD_t sampleImage = { .x = LCD_HORIZONTAL_MAX / 2,
-                          .y = LCD_VERTICAL_MAX / 2,
-                          .image_width_pixels = 14,
-                          .image_height_pixels = 12,
-                          .image = enemyBitmaps,
-                          .fColor = LCD_COLOR_MAGENTA,
-                          .bColor = LCD_COLOR_BLACK,
+
+/*
+ * Generates and returns new enemy LCD type.
+ *
+ * Returns LCD type with enemy basic information
+ */
+LCD_t newEnemyImage(void) {
+    LCD_t enemyImage = { .x = LCD_HORIZONTAL_MAX / 2,
+                         .y = LCD_VERTICAL_MAX / 2,
+                         .image_width_pixels = 14,
+                         .image_height_pixels = 12,
+                         .image = enemyBitmaps,
+                         .fColor = LCD_COLOR_MAGENTA,
+                         .bColor = LCD_COLOR_BLACK,
     };
-    return sampleImage;
+    return enemyImage;
 }
 
-// Title image
-const uint8_t titleBitmaps[] =
+// Title Image.
+static const uint8_t titleBitmaps[] =
 {
     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xF0, 0x00, 0x00, 0x00, 0x00, 0x00, //   ------------------------------------------------------------------------####----------------------------------------
     0x07, 0x80, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xF0, 0x00, 0x00, 0x00, 0x00, 0x00, //   -----####---------------------------------------------------------------####----------------------------------------
@@ -120,20 +74,17 @@ const uint8_t titleBitmaps[] =
     0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xF0, //   ####################################################################################################################
     0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xF0, //   ####################################################################################################################
 };
-LCD_t titleImage(void) {
-    LCD_t sampleImage = { .x = LCD_HORIZONTAL_MAX / 2,
-                          .y = 51,
-                          .image_width_pixels = 116,
-                          .image_height_pixels = 29,
-                          .image = titleBitmaps,
-                          .fColor = LCD_COLOR_GREEN,
-                          .bColor = LCD_COLOR_BLACK,
-    };
-    return sampleImage;
-}
+const LCD_t titleImage = { .x = LCD_HORIZONTAL_MAX / 2,
+                           .y = 51,
+                           .image_width_pixels = 116,
+                           .image_height_pixels = 29,
+                           .image = titleBitmaps,
+                           .fColor = LCD_COLOR_YELLOW,
+                           .bColor = LCD_COLOR_BLACK,
+                         };
 
-// Beginning instructions image.
-const uint8_t beginBitmaps[] =
+// Starting Instructions Image.
+static const uint8_t startBitmaps[] =
 {
     0x00, 0x00, 0x00, 0x00, 0x00, 0x20, 0x00, 0x00, 0x00, 0x02, 0x00, 0x00, 0x00, 0x00, 0x00, //   ------------------------------------------#-----------------------------------#---------------------------------------
     0x7C, 0x00, 0x00, 0x00, 0x04, 0x20, 0x00, 0x03, 0x87, 0x02, 0x00, 0x02, 0x10, 0x00, 0x00, //   -#####-------------------------------#----#-------------------###----###------#---------------#----#------------------
@@ -167,20 +118,17 @@ const uint8_t beginBitmaps[] =
     0x00, 0x00, 0x00, 0x00, 0x42, 0x00, 0x00, 0x00, 0x00, 0x01, 0x08, 0x00, 0x00, 0x00, 0x00, //   ---------------------------------#----#----------------------------------------#----#---------------------------------
     0x00, 0x00, 0x00, 0x00, 0x3C, 0x00, 0x00, 0x00, 0x00, 0x00, 0xF0, 0x00, 0x00, 0x00, 0x00, //   ----------------------------------####------------------------------------------####----------------------------------
 };
-LCD_t beginImage(void) {
-    LCD_t sampleImage = { .x = LCD_HORIZONTAL_MAX / 2,
-                          .y = 83,
-                          .image_width_pixels = 118,
-                          .image_height_pixels = 31,
-                          .image = beginBitmaps,
-                          .fColor = LCD_COLOR_GREEN,
-                          .bColor = LCD_COLOR_BLACK,
-    };
-    return sampleImage;
-}
+const LCD_t startImage = { .x = LCD_HORIZONTAL_MAX / 2,
+                           .y = 83,
+                           .image_width_pixels = 118,
+                           .image_height_pixels = 31,
+                           .image = startBitmaps,
+                           .fColor = LCD_COLOR_YELLOW,
+                           .bColor = LCD_COLOR_BLACK,
+                         };
 
-// lose Image.
-const uint8_t loseBitmaps[] =
+// Lose Image.
+static const uint8_t loseBitmaps[] =
 {
     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x30, 0x00, 0x00, //   --------------------------------------------------------------------------##------------------
     0x00, 0x0C, 0x31, 0xE1, 0x86, 0x0C, 0x0F, 0x07, 0x3F, 0x30, 0x00, 0x00, //   ------------##----##---####----##----##-----##------####-----###--######--##------------------
@@ -232,20 +180,17 @@ const uint8_t loseBitmaps[] =
     0x00, 0x00, 0x00, 0x42, 0x00, 0x00, 0x00, 0x00, 0x04, 0x20, 0x00, 0x00, //   -------------------------#----#--------------------------------------#----#-------------------
     0x00, 0x00, 0x00, 0x3C, 0x00, 0x00, 0x00, 0x00, 0x03, 0xC0, 0x00, 0x00, //   --------------------------####----------------------------------------####--------------------
 };
-LCD_t loseImage(void) {
-    LCD_t sampleImage = { .x = LCD_HORIZONTAL_MAX / 2,
+const LCD_t loseImage = { .x = LCD_HORIZONTAL_MAX / 2,
                           .y = 92,
                           .image_width_pixels = 94,
                           .image_height_pixels = 49,
                           .image = loseBitmaps,
                           .fColor = LCD_COLOR_RED,
                           .bColor = LCD_COLOR_BLACK,
-    };
-    return sampleImage;
-}
+                        };
 
-// win Image
-const uint8_t winBitmaps[] =
+// Win Image.
+static const uint8_t winBitmaps[] =
 {
     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x03, 0x00, 0x00, //   ------------------------------------------------------------------------------##--------------
     0x00, 0x0C, 0x31, 0xE1, 0x86, 0x18, 0x61, 0x8F, 0x0C, 0x33, 0x00, 0x00, //   ------------##----##---####----##----##----##----##----##---####----##----##--##--------------
@@ -297,15 +242,11 @@ const uint8_t winBitmaps[] =
     0x00, 0x00, 0x00, 0x42, 0x00, 0x00, 0x00, 0x00, 0x04, 0x20, 0x00, 0x00, //   -------------------------#----#--------------------------------------#----#-------------------
     0x00, 0x00, 0x00, 0x3C, 0x00, 0x00, 0x00, 0x00, 0x03, 0xC0, 0x00, 0x00, //   --------------------------####----------------------------------------####--------------------
 };
-
-LCD_t winImage(void) {
-    LCD_t sampleImage = { .x = LCD_HORIZONTAL_MAX / 2,
-                          .y = 92,
-                          .image_width_pixels = 94,
-                          .image_height_pixels = 49,
-                          .image = winBitmaps,
-                          .fColor = LCD_COLOR_GREEN2,
-                          .bColor = LCD_COLOR_BLACK,
-    };
-    return sampleImage;
-}
+const LCD_t winImage = { .x = LCD_HORIZONTAL_MAX / 2,
+                         .y = 92,
+                         .image_width_pixels = 94,
+                         .image_height_pixels = 49,
+                         .image = winBitmaps,
+                         .fColor = LCD_COLOR_GREEN,
+                         .bColor = LCD_COLOR_BLACK,
+                       };

@@ -60,11 +60,9 @@ static bool playGame(void) {
  */
 static void task_menu(void *pvParameters) {
     // Display starting screen.
-    LCD_t title = titleImage();
-    LCD_t begin = beginImage();
     clearScreen();
-    LCDget(&title);
-    LCDget(&begin);
+    LCDget(&titleImage);
+    LCDget(&startImage);
 
     // Endless Task Loop.
     while (1) {
@@ -79,14 +77,12 @@ static void task_menu(void *pvParameters) {
 
         // Display appropriate message.
         clearScreen();
-        LCDget(&title); // Saved from initialization
+        LCDget(&titleImage);
         if (playerWon) {
-            LCD_t won = winImage();
-            LCDget(&won);
+            LCDget(&winImage);
         }
         else {
-            LCD_t lost = loseImage();
-            LCDget(&lost);
+            LCDget(&loseImage);
         }
     }
 }

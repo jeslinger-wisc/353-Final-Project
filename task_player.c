@@ -20,7 +20,7 @@ static volatile bool IS_HIT = false;
  */
 void task_player(void *pvParameters) {
     // Var with LCD image
-    LCD_t playerImage = sampleImage();
+    LCD_t playerImage = newEnemyImage();
     playerImage.x = 64;
     playerImage.y = 110;
 

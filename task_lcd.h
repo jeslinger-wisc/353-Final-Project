@@ -13,11 +13,6 @@
 #include "task_light.h"
 
 /*
- * "Clears" screen by setting every pixel to black.
- */
-void clearScreen(void);
-
-/*
  * Sets the priority of the LCD Task.
  *
  * pLvl- Priority Level to set the task to.
@@ -26,6 +21,11 @@ void setTaskLCDPriority(uint32_t pLvl);
 
 // TODO
 BaseType_t LCDget(LCD_t* LCDimage);
+
+/*
+ * "Clears" screen by setting every pixel to black.
+ */
+void clearScreen(void);
 
 /*
  * Initializes hardware/software resources and creates LCD Task.

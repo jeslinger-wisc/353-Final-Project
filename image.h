@@ -2,7 +2,7 @@
  * image.h
  *
  *  Created on: Apr 26, 2021
- *      Author: jesli
+ *      Author: John Eslinger
  */
 
 #ifndef IMAGE_H_
@@ -22,22 +22,23 @@ typedef struct LCD_Struct {
      uint16_t bColor;
 } LCD_t;
 
-// Sample image.
-LCD_t sampleImage(void);
+/*
+ * Generates and returns new enemy LCD type.
+ *
+ * Returns LCD type with basic enemy image information
+ */
+LCD_t newEnemyImage(void);
 
-// Enemy image.
-LCD_t enemyImage(void);
+// Global constant LCD_t for game's title image.
+extern const LCD_t titleImage;
 
-// Title image.
-LCD_t titleImage(void);
+// Global constant LCD_t for game's starting instructions image.
+extern const LCD_t startImage;
 
-// Beginning instructions image.
-LCD_t beginImage(void);
+// Global constant LCD_t for game's lose image.
+extern const LCD_t loseImage;
 
-// Lose image.
-LCD_t loseImage(void);
-
-// Win image.
-LCD_t winImage(void);
+// Global constant LCD_t for game's win image.
+extern const LCD_t winImage;
 
 #endif /* IMAGE_H_ */

@@ -36,27 +36,26 @@ void task_lcd(void *pvParameters) {
             curImage.fColor = (curImage.fColor ^ 0xFFFF);
         }
 
-        // Display image.
-        lcd_draw_image(curImage.x,
-                       curImage.y,
-                       curImage.image_width_pixels,
-                       curImage.image_height_pixels,
-                       curImage.image,
-                       curImage.fColor,
-                       curImage.bColor
-        );
+        // Display image as appropriate.
+        if (curImage.image != NULL) { // Drawing image
+            lcd_draw_image(curImage.x,
+                           curImage.y,
+                           curImage.image_width_pixels,
+                           curImage.image_height_pixels,
+                           curImage.image,
+                           curImage.fColor,
+                           curImage.bColor
+            );
+        }
+        else { // Drawing background rectangle
+            lcd_draw_rectangle(curImage.x,
+                           curImage.y,
+                           curImage.image_width_pixels,
+                           curImage.image_height_pixels,
+                           curImage.bColor
+            );
+        }
     }
-}
-
-/*
- * "Clears" screen by setting every pixel to black.
- */
-void clearScreen(void) {
-    lcd_draw_rectangle(LCD_HORIZONTAL_MAX/ 2,
-                       LCD_VERTICAL_MAX/ 2,
-                       LCD_HORIZONTAL_MAX,
-                       LCD_VERTICAL_MAX,
-                       LCD_COLOR_BLACK);
 }
 
 /*
@@ -71,6 +70,21 @@ void setTaskLCDPriority(uint32_t pLvl) {
 // TODO
 BaseType_t LCDget(LCD_t* LCDimage) {
     return xQueueSendToBack(Queue_Lcd, LCDimage, portMAX_DELAY);
+}
+
+/*
+ * "Clears" screen by setting every pixel to black.
+ */
+void clearScreen(void) {
+    LCD_t clearImage = { .x = LCD_HORIZONTAL_MAX / 2,
+                          .y = LCD_VERTICAL_MAX / 2,
+                          .image_width_pixels = LCD_HORIZONTAL_MAX,
+                          .image_height_pixels = LCD_VERTICAL_MAX,
+                          .image = NULL, // Signals to draw black rectangle
+                          .fColor = LCD_COLOR_BLACK,
+                          .bColor = LCD_COLOR_BLACK,
+    };
+    LCDget(&clearImage);
 }
 
 /*

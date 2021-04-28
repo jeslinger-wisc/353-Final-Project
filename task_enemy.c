@@ -19,24 +19,24 @@ static volatile bool IS_LIVE = false;
  */
 static void task_enemy(void *pvParameters) {
     // Constant used for edge calculations.
-    const int enemyRadius = (enemyImage().image_width_pixels / 2) + 1;
+    const int enemyRadius = (newEnemyImage().image_width_pixels / 2) + 1;
 
     // Vars to record positional and directional data.
     bool movingLeft = false;
-    uint16_t curY = ((enemyImage().image_height_pixels) / 2) + 1;
+    uint16_t curY = ((newEnemyImage().image_height_pixels) / 2) + 1;
 
     // Array of enemy sprite info.
     LCD_t enemies[ENEMY_COUNT];
 
     // Initialize each enemy and display them.
-    int startX = ((enemyImage().image_width_pixels) / 2) + 1;
+    int startX = ((newEnemyImage().image_width_pixels) / 2) + 1;
     int index = 0;
     for (; index < ENEMY_COUNT; index++) {
         // Set enemy details.
-        enemies[index] = enemyImage();
+        enemies[index] = newEnemyImage();
 
         // Adjust enemy location.
-        enemies[index].x = enemyRadius + (index * (enemyImage().image_width_pixels + 1));
+        enemies[index].x = enemyRadius + (index * (newEnemyImage().image_width_pixels + 1));
         enemies[index].y = curY;
 
         // Display enemy.
