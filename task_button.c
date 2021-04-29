@@ -19,8 +19,9 @@ static volatile bool IS_LIVE = false;
 static volatile bool IS_PRESSED = false;
 
 /*
- * Button Task:
- * JohnEsl-TODO
+ * Button Task: Debounces the S2 button and updates an system-wide
+ * viewable variable that conveys the de-bounced status of the button. Sleeps
+ * between debounces according to configurable time variable.
  */
 static void task_button(void *pvParameters) {
     // Var to store last 32 samples.

@@ -19,7 +19,13 @@
  */
 void setTaskLCDPriority(uint32_t pLvl);
 
-// TODO
+/*
+ * Queue an image to be displayed on the LCD screen.
+ *
+ * LCDimage- ptr to image to display on the screen
+ *
+ * Returns TRUE if successful, FALSE otherwise
+ */
 BaseType_t LCDget(LCD_t* LCDimage);
 
 /*

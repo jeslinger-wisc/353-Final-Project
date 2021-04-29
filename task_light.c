@@ -15,8 +15,9 @@ static volatile bool IS_LIVE = false;
 static volatile bool IS_DARK = false;
 
 /*
- * Light Task:
- * JohnEsl-TODO
+ * Light Task: Gets the current lux measurement from the light sensor
+ * (via I2C) and sets readable variable based on lux value per cycle.
+ * Delay between cycles based on configuration value.
  */
 static void task_light(void *pvParameters) {
     // Endless Task Loop.

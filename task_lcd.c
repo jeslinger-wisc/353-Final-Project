@@ -17,8 +17,13 @@ static QueueHandle_t Queue_Lcd;
 static volatile bool IS_LIVE = false;
 
 /*
- * Function for LCD Task.
- * JohnEsl-TODO
+ * LCD Task: Handles all LCD drawing requests. Takes/Waits for an
+ * image from a queue, displays it on the screen, and repeats.
+ *
+ * Note: Images undergo a few edits/checks, namely 1) if darkness is
+ * detected, non-black colors will be XORed 2) if the image data
+ * ptr is null, the remaining data will be used to draw a rectangle
+ * with the background color.
  */
 void task_lcd(void *pvParameters) {
     // Var to store current image being processed.
@@ -67,7 +72,13 @@ void setTaskLCDPriority(uint32_t pLvl) {
     vTaskPrioritySet(Task_Lcd_Handle, pLvl);
 }
 
-// TODO
+/*
+ * Queue an image to be displayed on the LCD screen.
+ *
+ * LCDimage- ptr to image to display on the screen
+ *
+ * Returns TRUE if successful, FALSE otherwise
+ */
 BaseType_t LCDget(LCD_t* LCDimage) {
     return xQueueSendToBack(Queue_Lcd, LCDimage, portMAX_DELAY);
 }

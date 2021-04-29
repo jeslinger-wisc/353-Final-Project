@@ -16,8 +16,8 @@ static volatile bool IS_LIVE = false;
 static volatile dir_t ACCEL_DIR = CENTER;
 
 /*
- * Accelerometer Task:
- * JohnEsl-TODO
+ * Accelerometer Task: Starts an ADC conversion of accelerometer's
+ * x-axis before sleeping for a configurable amount of milliseconds.s
  */
 static void task_accel(void *pvParameters) {
     // Endless Task Loop.
@@ -31,8 +31,9 @@ static void task_accel(void *pvParameters) {
 }
 
 /*
- * Accelerometer Bottom Half Sub-Task:
- * JohnEsl-TODO
+ * Accelerometer Bottom Half Sub-Task: Takes ADC converted values (passed in
+ * via a task notification) and uses them to convey the direction the x-axis
+ * of the accelerometer is being tilted.
  */
 static void task_accel_bottom_half(void *pvParameters) {
     // Var to get current accelerometer reading.

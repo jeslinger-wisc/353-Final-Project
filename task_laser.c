@@ -18,9 +18,10 @@ static volatile bool IS_LIVE = false;
 static volatile laser_t LASERS[LASER_COUNT];
 
 /*
- * TODO
- * Function for Laser Task.
- *
+ * Laser Task: Handles laser creation, movement, and (partial) tear down.
+ * Within a cycle, each laser is moved and torn down if it has reached an
+ * edge. A new laser is also created each cycle if applicable. A configurable
+ * amount of time is waited in between cycles.
  */
 void task_laser(void *pvParameters) {
     // Constant used within the Laser Task.

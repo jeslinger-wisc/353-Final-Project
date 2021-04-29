@@ -46,8 +46,8 @@ static void playBuzzer(uint32_t notePeriod) {
 }
 
 /*
- * Function for Buzzer Task.
- * JohnEsl-TODO
+ * Buzzer Task: Takes (or waits for) queued melodies and plays them in
+ * order of queueing.
  */
 void task_buzzer(void *pvParameters) {
     // Var to store current melody being processed.

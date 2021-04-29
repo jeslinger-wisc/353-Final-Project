@@ -27,6 +27,7 @@ void task_player(void *pvParameters) {
 
     // Var with LCD image
     LCD_t playerImage = newEnemyImage();
+    playerImage.fColor = LCD_COLOR_GREEN;
     playerImage.x = 64;
     playerImage.y = 110;
     const int playerXRadius = (newEnemyImage().image_width_pixels / 2) + 1;

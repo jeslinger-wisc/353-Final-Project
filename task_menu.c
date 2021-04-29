@@ -62,8 +62,13 @@ static bool playGame(void) {
 }
 
 /*
- * Menu Task:
- * JohnEsl-TODO
+ * Menu Task: Handles overall control flow of game. Upon startup,
+ * it displays the title screen. Afterwards, it , per cycle, waits
+ * for a button press, switches to game play mode (putting itself to sleep),
+ * wakes up after the game finishes, and displays the result.
+ *
+ * Note: Actively creates and deletes "gameplay" tasks. Also changes
+ * priority of "IO" tasks to allow user input during the game.
  */
 static void task_menu(void *pvParameters) {
     // Display starting screen w/ music.

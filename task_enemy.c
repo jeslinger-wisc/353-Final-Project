@@ -14,8 +14,14 @@ static TaskHandle_t Task_Enemy_Handle = NULL;
 static volatile bool IS_LIVE = false;
 
 /*
- * Enemy Task:
- * JohnEsl-TODO
+ * Enemy Task: Handles all actions relating to enemy sprites. After
+ * initializing sprites' data and image, updates each enemy within a cycle by
+ * moving them, checking if they have been hit (ie tearing them down if so),
+ * and shooting a laser from their sprite. Afterwards, it checks for end
+ * game scenarios (no enemies left or enemies reach final line). Cycles have
+ * a configurable time delay between them.
+ *
+ * Note: Upon being hit, also tears down the laser hitting the enemy.
  */
 static void task_enemy(void *pvParameters) {
     // Often used constants for the Enemy Task.
@@ -153,7 +159,7 @@ static void task_enemy(void *pvParameters) {
         }
 
         // End game as needed.
-        if (enemies[0].y >= ENEMY_Y_ENDGAME) {
+        if (enemies[ENEMY_COUNT - 1].y >= ENEMY_Y_ENDGAME) {
             switchToControlMode(false);
         }
 
