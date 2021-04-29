@@ -9,52 +9,43 @@
 #define CONFIG_H_
 
 // Group Priority Levels
-#define CONTROL_PRIORITY        3 // Priority of game management tasks
-#define GAME_PRIORITY           2 // Priority of gameplay tasks
+#define CONTROL_PRIORITY        3       // Priority of game management tasks
+#define GAME_PRIORITY           2       // Priority of game play tasks
 
 // Menu Task Configs
-#define MENU_KILL_DELAY         50
+#define MENU_KILL_DELAY         50      // Time (ms) idle task gets to garbage collect for between games
 
 // Button Task Configs
-#define BUTTON_DEBOUNCE_VALUE   10      // # of consecutive pressed samples for "pressed" state
-#define BUTTON_PERIOD_DELAY     5       // Time (ms) between button sampling
+#define BUTTON_DEBOUNCE_VALUE   10      // Consecutive presses needed to confirm "pressed" state
+#define BUTTON_PERIOD_DELAY     10      // Time (ms) between button press samples
 
 // Buzzer Task Configs
 #define BUZZER_BPM              180     // Beats per minute to play melodies at
-#define BUZZER_QUEUE_SIZE       10      // Size of queue for pending melodies
+#define BUZZER_QUEUE_SIZE       25      // Size of queue for pending melodies
 
 // Accelerometer Task Configs
-#define ACCEL_PERIOD_DELAY      5       // Time (ms) between ADC conversion starts
+#define ACCEL_PERIOD_DELAY      10      // Time (ms) between ADC conversion startups
 #define ACCEL_CENTER_SAMPLE     2060    // Average x-axis value when held flat (experimentally found)
-#define ACCEL_CENTER_THRESH    (830 / 3)// Radius of "center" region (830 being experimentally found limit)
+#define ACCEL_CENTER_THRESH     277     // Radius of "center" region of x-axis (+- 830 is max for sides)
 
 // Light Sensor Task Configs
-#define LIGHT_PERIOD_DELAY      5       // Time (ms) between checking the light sensor
-#define LIGHT_DARK_THRESH       100     // Largest lux value that registers as "dark"
+#define LIGHT_PERIOD_DELAY      10      // Time (ms) between light sensor samplings
+#define LIGHT_DARK_THRESH       50      // Largest value (in lux) that classifies as "Dark"
 
 // LCD Task Configs
-#define LCD_QUEUE_SIZE          15      // Size of queue for pending images
+#define LCD_QUEUE_SIZE          25      // Size of queue for pending images to draw
 
 // Player Task Configs
-#define PLAYER_PERIOD_DELAY     8       //
+#define PLAYER_PERIOD_DELAY     10      // Time (ms) between player action updates
 
 // Enemy Task Configs
 #define ENEMY_COUNT             7       // Number of enemies displayed per game
-#define ENEMY_PERIOD_DELAY      1       // Time (ms) between updating enemies
-#define ENEMY_Y_ENDGAME         66      // Y value enemies must reach in order to force the game to end
-#define ENEMY_SHOOT_CHANCE      500     // Fractional chance a given enemy will shoot its laser (i.e. 1/x)
+#define ENEMY_PERIOD_DELAY      10      // Time (ms) between enemy action updates (updated in one large group)
+#define ENEMY_Y_ENDGAME         100     // Y value enemies must reach in order to force the game to end
+#define ENEMY_SHOOT_CHANCE      550     // 1/x chance an enemy will shoot its laser (while being updated)
 
 // Laser Task Configs
-#define LASER_COUNT             10      //
-#define LASER_PERIOD_DELAY      5       //
+#define LASER_COUNT             20      // Number of laser that canbe simultaneously displayed
+#define LASER_PERIOD_DELAY      10      // Time (ms) between laser action updates (updated in one large group)
 
 #endif /* CONFIG_H_ */
-
-///////////////////
-// Config Checks //
-///////////////////
-
-// Priority level check
-#if CONTROL_PRIORITY <= GAME_PRIORITY
-//#error "CONTROL PRIORITY must be greater than GAME_PRIORITY"
-#endif

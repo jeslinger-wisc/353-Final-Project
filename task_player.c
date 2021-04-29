@@ -48,7 +48,7 @@ void task_player(void *pvParameters) {
                {
                 case  LEFT://MOVE LEFT
                        {
-                           if(playerImage.x > 5){
+                           if(playerImage.x > playerXRadius){
 
                              playerImage.x= playerImage.x-1;
                              //Check if the player is hit, priority!
@@ -68,7 +68,7 @@ void task_player(void *pvParameters) {
                        }
                    case RIGHT: //MOVE RIGHT
                        {
-                           if(playerImage.x < 130){
+                           if(playerImage.x < (LCD_HORIZONTAL_MAX - playerXRadius)){
 
                                playerImage.x=playerImage.x+1;
 

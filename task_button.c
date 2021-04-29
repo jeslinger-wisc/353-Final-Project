@@ -108,11 +108,3 @@ int killTaskButton(void) {
     IS_LIVE = false;
     return 0;
 }
-
-// Check de-bounce value will work
-#if BUTTON_DEBOUNCE_VALUE > 32
-#error "BUTTON_DEBOUNCE_VALUE must be between 0 and 32 inclusive"
-#endif
-#if BUTTON_DEBOUNCE_VALUE < 0
-#error "BUTTON_DEBOUNCE_VALUE must be between 0 and 32 inclusive"
-#endif
