@@ -76,6 +76,7 @@ static void task_menu(void *pvParameters) {
     while (1) {
         // Wait for starting button press.
         while (!isButtonPressed()) {};
+        while (isButtonPressed()) {};
 
         // Clear screen for gameplay.
         clearScreen();

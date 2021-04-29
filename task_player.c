@@ -13,7 +13,6 @@ static TaskHandle_t Task_Player_Handle;
 static volatile bool IS_LIVE = false;
 static volatile bool IS_HIT = false;
 
-
 /*
  * Function for Player Task. Controls the movement of the player sprite via
  * the data returned from the accelerometer (player movement is allowed on the x axis)
@@ -23,6 +22,9 @@ static volatile bool IS_HIT = false;
  */
 
 void task_player(void *pvParameters) {
+    // Var to determine if ready to shoot another laser.
+    static bool readyToShoot = false;
+
     // Var with LCD image
     LCD_t playerImage = newEnemyImage();
     playerImage.x = 64;
@@ -58,13 +60,6 @@ void task_player(void *pvParameters) {
                              else{//otherwise print the new position of player
                                  LCDget(&playerImage);
                              }
-                             //Propel the laser accross the screen from the player
-                             if(isButtonPressed()){
-                                 playerLaser.image.x =  playerImage.x;
-                                 playerLaser.image.y = playerImage.y - playerYRadius - 1;
-                                 queueLaser(&playerLaser);
-                                 queueMelody(&enemyShotMelody);
-                             }
                              break;
                              }
                            else{
@@ -86,13 +81,6 @@ void task_player(void *pvParameters) {
                                else{//otherwise print the new position of player
                                    LCDget(&playerImage);
                                }
-                               //Propel the laser accross the screen from the player
-                               if(isButtonPressed()){
-                                   playerLaser.image.x =  playerImage.x;
-                                   playerLaser.image.y = playerImage.y - playerYRadius - 1;
-                                   queueLaser(&playerLaser);
-                                   queueMelody(&enemyShotMelody);
-                               }
                               break;
                                }
                            else{
@@ -110,13 +98,6 @@ void task_player(void *pvParameters) {
                             else{//otherwise print the new position of player
                                 LCDget(&playerImage);
                             }
-                            //Propel the laser accross the screen from the player
-                            if(isButtonPressed()){
-                                playerLaser.image.x =  playerImage.x;
-                                playerLaser.image.y = playerImage.y - playerYRadius - 1;
-                                queueLaser(&playerLaser);
-                                queueMelody(&enemyShotMelody);
-                            }
                         break;
                       }
                    default:
@@ -124,6 +105,24 @@ void task_player(void *pvParameters) {
                        break;
                    }
                }
+
+        // Enable laser upon button un-pressing.
+        if (!isButtonPressed()) {
+            readyToShoot = true;
+        }
+
+        // Shoot laser when ready + signaled.
+        if (readyToShoot && isButtonPressed()) {
+            //Propel the laser across the screen from the player
+            playerLaser.image.x =  playerImage.x;
+            playerLaser.image.y = playerImage.y - playerYRadius - 1;
+            queueLaser(&playerLaser);
+            queueMelody(&playerShotMelody);
+
+            // Disable shooting.
+            readyToShoot = false;
+        }
+
        vTaskDelay(pdMS_TO_TICKS(PLAYER_PERIOD_DELAY));
     }
 }
@@ -182,7 +181,7 @@ void markAsHit(LCD_t* playerImage) {
          else { // HIT DETECTED! YOU LOSE
 
              playerImage->fColor = LCD_COLOR_BLACK;
-             LCDget(&playerImage);
+             LCDget(playerImage);
              playerImage->image = NULL;
 
              // Play death melody.
