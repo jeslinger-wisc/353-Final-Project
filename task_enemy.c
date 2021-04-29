@@ -22,11 +22,11 @@ static void task_enemy(void *pvParameters) {
     const int enemyXRadius = (newEnemyImage().image_width_pixels / 2) + 1;
     const int enemyYRadius = (newEnemyImage().image_height_pixels / 2) + 1;
     const int enemyWidth = newEnemyImage().image_width_pixels;
+    const int enemyHeight = newEnemyImage().image_height_pixels;
 
     // Vars to record position/movement of enemies.
     int leftLimit = 0;
-    int rightLimit = (ENEMY_COUNT * (enemyWidth + 1)) + 1;
-    int curY = enemyYRadius;
+    int rightLimit = (ENEMY_PER_ROW * (enemyWidth + 1)) + 1;
     bool goingLeft = false;
 
     // Var to record number of enemies alive.
@@ -36,17 +36,24 @@ static void task_enemy(void *pvParameters) {
     LCD_t enemies[ENEMY_COUNT];
 
     // Initialize each enemy and display them.
-    int index = 0;
-    for (; index < ENEMY_COUNT; index++) {
-        // Set enemy details.
-        enemies[index] = newEnemyImage();
+    int numCols = (ENEMY_COUNT / ENEMY_PER_ROW) + ((ENEMY_COUNT % ENEMY_PER_ROW) != 0);
+    int colIndex = 0;
+    for (; colIndex < numCols; colIndex++) {
+        int rowIndex = 0;
+        for (; rowIndex < ENEMY_PER_ROW; rowIndex++) {
+            // Determine index.
+            int index = (colIndex * ENEMY_PER_ROW) + rowIndex;
 
-        //Adjust enemy location.
-        enemies[index].x = enemyXRadius + (index * (enemyWidth + 1));
-        enemies[index].y = curY;
+            // Set enemy details.
+            enemies[index] = newEnemyImage();
 
-        // Display enemy.
-        LCDget(&(enemies[index]));
+            //Adjust enemy location.
+            enemies[index].x = enemyXRadius + (rowIndex * (enemyWidth + 1));
+            enemies[index].y = enemyYRadius + (colIndex * (enemyHeight + 1));
+
+            // Display enemy.
+            LCDget(&(enemies[index]));
+        }
     }
 
     // Endless Task Loop.
@@ -100,13 +107,11 @@ static void task_enemy(void *pvParameters) {
                     // Play death melody.
                     queueMelody(&enemyDeathMelody);
 
-                    //* Get rid of lasers on impact- leave out for now.
                     // Kill laser.
                     laser->image.image = NULL;
                     LCD_t img = laser->image; // convert to non-volatile.
                     img.fColor = LCD_COLOR_BLACK;
                     LCDget(&img);
-                    //*/
 
                     // Check if any enemies are left.
                     enemiesAlive--;
@@ -120,7 +125,6 @@ static void task_enemy(void *pvParameters) {
 
             // Move enemy.
             enemies[index].x += (goingLeft) ? -1 : 1;
-            enemies[index].y = curY;
             LCDget(&(enemies[index]));
 
             // Attempt to shoot laser.
@@ -142,11 +146,14 @@ static void task_enemy(void *pvParameters) {
         // Change movement direction/Y-level as needed.
         if ((leftLimit <= 0) || (rightLimit >= LCD_HORIZONTAL_MAX)) {
             goingLeft = !goingLeft;
-            curY++;
+            int index = 0;
+            for(; index < ENEMY_COUNT; index++) {
+                enemies[index].y += 1;
+            }
         }
 
         // End game as needed.
-        if (curY >= ENEMY_Y_ENDGAME) {
+        if (enemies[0].y >= ENEMY_Y_ENDGAME) {
             switchToControlMode(false);
         }
 
