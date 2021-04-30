@@ -43,7 +43,7 @@
 #define ENEMY_PER_ROW           7       // Number of enemies to display per row
 #define ENEMY_PERIOD_DELAY      30      // Time (ms) between enemy action updates (updated in one large group)
 #define ENEMY_Y_ENDGAME         100     // Y value enemies must reach in order to force the game to end
-#define ENEMY_SHOOT_CHANCE      200      // 1/x chance an enemy will shoot its laser (while being updated)
+#define ENEMY_SHOOT_CHANCE      200     // 1/x chance an enemy will shoot its laser (while being updated)
 
 // Laser Task Configs
 #define LASER_COUNT             20      // Number of laser that canbe simultaneously displayed
